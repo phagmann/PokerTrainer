@@ -1,0 +1,2 @@
+module Hand::CardsHelper
+end
