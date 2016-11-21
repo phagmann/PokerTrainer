@@ -1,3 +1,22 @@
 // Place all the styles related to the menus controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.element {
+  height: 400px;
+  width: 400px;
+  background-color: red;
+  animation: 
+    nudge 5s linear;
+  border-radius: 100%;
+}
+
+
+@keyframes nudge {
+  
+  0% {
+    transform: translate(150px, 0);
+  }
+  
+}
