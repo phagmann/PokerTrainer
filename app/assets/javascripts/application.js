@@ -69,8 +69,6 @@ function myMove(current) {
       var elem = document.getElementById( current.toString());
       var vert = 0;
       var horz = 0;
-      var time = setInterval(frame, 0);
-      console.log(frame);
       function frame() {
         if (vert >= 160) {
           console.log(current);
@@ -84,6 +82,8 @@ function myMove(current) {
           elem.style.left = -1*horz + "px";
         };
       };
+      var time = setInterval(frame, 0);
+      
     }
   
 
