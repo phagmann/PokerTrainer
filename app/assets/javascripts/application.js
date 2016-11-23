@@ -18,7 +18,7 @@
 
 
 function myMove(current) {
-    if (current > 6) {
+    if (current > 11) {
         return;
     }
 
@@ -88,8 +88,109 @@ function myMove(current) {
       var time = setInterval(frame3, 1);
       
     }
-    else{
-      return myMove(current + 1);
+    else if (current === 7){
+      var elem = document.getElementById( current.toString());
+      console.log(elem);
+      var vert = 0;
+      var horz = 0;
+      function frame4() {
+        if (horz >= 280) {
+          clearInterval(time);
+          return myMove(current + 1);
+        } 
+        else {
+          
+          horz += 10;
+          elem.style.top = -1*vert + "px";
+          elem.style.left = -1*horz + "px";
+        };
+      };
+      var time = setInterval(frame4, 1);
+      
+    }
+
+    else if (current === 8){
+      var elem = document.getElementById( current.toString());
+      console.log(elem);
+      var vert = 0;
+      var horz = 0;
+      function frame4() {
+        if (horz >= 230) {
+          clearInterval(time);
+          return myMove(current + 1);
+        } 
+        else {
+          
+          horz += 10;
+          elem.style.top = -1*vert + "px";
+          elem.style.left = -1*horz + "px";
+        };
+      };
+      var time = setInterval(frame4, 1);
+      
+    }
+
+    else if (current === 9){
+      var elem = document.getElementById( current.toString());
+      console.log(elem);
+      var vert = 0;
+      var horz = 0;
+      function frame5() {
+        if (horz >= 180) {
+          clearInterval(time);
+          return myMove(current + 1);
+        } 
+        else {
+          
+          horz += 10;
+          elem.style.top = -1*vert + "px";
+          elem.style.left = -1*horz + "px";
+        };
+      };
+      var time = setInterval(frame5, 1);
+      
+    }
+
+    else if (current === 10){
+      var elem = document.getElementById( current.toString());
+      console.log(elem);
+      var vert = 0;
+      var horz = 0;
+      function frame6() {
+        if (horz >= 130) {
+          clearInterval(time);
+          return myMove(current + 1);
+        } 
+        else {
+          
+          horz += 10;
+          elem.style.top = -1*vert + "px";
+          elem.style.left = -1*horz + "px";
+        };
+      };
+      var time = setInterval(frame6, 1);
+      
+    }
+
+    else if (current === 11){
+      var elem = document.getElementById( current.toString());
+      console.log(elem);
+      var vert = 0;
+      var horz = 0;
+      function frame7() {
+        if (horz >= 80) {
+          clearInterval(time);
+          return myMove(current + 1);
+        } 
+        else {
+          
+          horz += 10;
+          elem.style.top = -1*vert + "px";
+          elem.style.left = -1*horz + "px";
+        };
+      };
+      var time = setInterval(frame7, 1);
+      
     }
   
 

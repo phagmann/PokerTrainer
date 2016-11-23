@@ -3,8 +3,8 @@ class GamesController < ApplicationController
   end
 
   def new
-        @deck = generate_deck.shuffle
 
+        @deck = generate_deck.shuffle
         @card1 = Card.new
         firstcard = @deck.pop[0]
         @card1.suit = firstcard[0]
@@ -17,8 +17,27 @@ class GamesController < ApplicationController
         @card2.suit = secondcard[0]
         @card2.rank = secondcard[1..-1]
         
-        @card1.save
-        @card2.save
+
+        @deck = @deck.shuffle
+        @river1 = Card.new
+        river1card = @deck.pop[0]
+        @river1.suit = river1card[0]
+        @river1.rank = river1card[1..-1]
+
+        @deck = @deck.shuffle
+        @river2 = Card.new
+        river2card = @deck.pop[0]
+        @river2.suit = river2card[0]
+        @river2.rank = river2card[1..-1]
+
+        @deck = @deck.shuffle
+        @river3 = Card.new
+        river3card = @deck.pop[0]
+        @river3.suit = river3card[0]
+        @river3.rank = river3card[1..-1]
+
+
+
 
   end
 

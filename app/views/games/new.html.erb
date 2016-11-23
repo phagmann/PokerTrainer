@@ -10,7 +10,9 @@
 <% display_hash = {'♠' => 'spades', '♥' => 'hearts', '♦' => 'diams', '♣' => 'clubs'} %>
 <% c1 = "card rank-" + @card1.rank.downcase + " " + display_hash[@card1.suit] %>
 <% c2 = "card rank-" + @card2.rank.downcase + " " + display_hash[@card2.suit] %>
-
+<% r1 = "card rank-" + @river1.rank.downcase + " " + display_hash[@river1.suit] %>
+<% r2 = "card rank-" + @river2.rank.downcase + " " + display_hash[@river2.suit] %>
+<% r3 = "card rank-" + @river3.rank.downcase + " " + display_hash[@river3.suit] %>
 
 <div class="playingCards faceImages">
 
@@ -44,18 +46,28 @@
         <span class="rank"><%=@card2.rank%></span>
         <span class="suit"><%=@card2.suit%></span>
     </div></li>
- <li><div id="7" class="card back">*</div></li>
-  <li><div id="8" class="card back">*</div></li>
- <li><div id="9" class="card back">*</div></li>
- <li><div class="card back">*</div></li>
-  <li><div class="card back">*</div></li>
+ <li><div id="7" class="<%=r1%>">
+        <span class="rank"><%=@river1.rank%></span>
+        <span class="suit"><%=@river1.suit%></span>
+ </div></li>
+  <li><div id="8" class="<%=r2%>">
+        <span class="rank"><%=@river2.rank%></span>
+        <span class="suit"><%=@river2.suit%></span>
+  </div></li>
+ <li><div id="9" class="<%=r3%>">
+        <span class="rank"><%=@river3.rank%></span>
+        <span class="suit"><%=@river3.suit%></span>
+ </div></li>
+ <li><div id="10" class="card back">*</div></li>
+  <li><div id="11" class="card back">*</div></li>
    <li><div class="card back">*</div></li>
     <li><div class="card back">*</div></li>
      <li><div class="card back">*</div></li>
       <li><div class="card back">*</div></li>
        <li><div class="card back">*</div></li>
         <li><div class="card back">*</div></li>
-
+        <li><div class="card back">*</div></li>
+        <li><div class="card back">*</div></li>
     
 
 </ul>
