@@ -16,19 +16,18 @@
 //= require turbolinks
 //= require_tree .
 
-"use strict";
+
 function myMove(current) {
     if (current > 6) {
         return;
     }
-    var e = function(){}
+     console.log(current === 1 || current === 4);
     if (current === 3 || current === 6) {
         var elem = document.getElementById( current.toString() );
         var vert = 0;
         var horz = 0;
         function frame() {
         if (vert >= 220 ) {
-          console.log(vert,horz);
           clearInterval(time);
           if (current === 6){
             elem.style.left = -110 + "px";
@@ -42,7 +41,7 @@ function myMove(current) {
           elem.style.left = -1*horz + "px";
         };
       };
-        var time = setInterval(frame, 0);
+        var time = setInterval(frame, 1);
         
    }
 
@@ -61,7 +60,7 @@ function myMove(current) {
           elem.style.left = -1*horz + "px";
         };
       };
-      var time = setInterval(frame, 0);
+      var time = setInterval(frame, 1);
       
    }
 
@@ -72,7 +71,6 @@ function myMove(current) {
       var horz = 0;
       function frame() {
         if (vert >= 160) {
-          console.log(current);
           clearInterval(time);
           myMove(current + 1);
         } 
@@ -83,7 +81,7 @@ function myMove(current) {
           elem.style.left = -1*horz + "px";
         };
       };
-      var time = setInterval(frame, 0);
+      var time = setInterval(frame, 1);
       
     }
   
