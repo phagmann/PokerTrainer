@@ -17,12 +17,12 @@
 //= require_tree .
 
 
-function myMove(id) {
-      if (id > 6){
+function myMove(current) {
+      if (current > 6){
         return
       }
-    if(id == 3 || id == 6){
-      var elem = document.getElementById(id.toString());
+    if(current == 3 || current == 6){
+      var elem = document.getElementById(current.toString());
       var vert = 0;
       var horz = 0;
       var time = setInterval(frame, 0);
@@ -30,10 +30,10 @@ function myMove(id) {
         if (vert >= 220 ) {
           console.log(vert,horz);
           clearInterval(time);
-          if(id == 6){
+          if(current == 6){
             elem.style.left = -110 + 'px'
           }
-          myMove(id+1);
+          myMove(current+1);
         } else {
           vert +=5;
           horz +=3.2;
@@ -43,8 +43,8 @@ function myMove(id) {
       }
    }
 
-    else if(id == 2 || id == 5){
-      var elem = document.getElementById(id.toString());
+    else if(current == 2 || current == 5){
+      var elem = document.getElementById(current.toString());
       var vert = 0;
       var horz = 0;
       var time = setInterval(frame, 0);
@@ -52,7 +52,7 @@ function myMove(id) {
         if (vert >= 200) {
           console.log(vert,horz);
           clearInterval(time);
-          myMove(id+1);
+          myMove(current+1);
         } else {
           vert +=5;
           elem.style.top = -vert + 'px';
@@ -62,16 +62,16 @@ function myMove(id) {
    }
 
 
-    else if(id == 1 || id == 4){
-      var elem = document.getElementById(id.toString());
+    else if(current == 1 || current == 4){
+      var elem = document.getElementById(current.toString());
       var vert = 0;
       var horz = 0;
       var time = setInterval(frame, 0);
       function frame() {
         if (vert >= 160 ) {
-          console.log(id);
+          console.log(current);
           clearInterval(time);
-          myMove(id+1);
+          myMove(current+1);
         } else {
           vert +=5;
           horz +=10;
