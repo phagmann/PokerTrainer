@@ -69,7 +69,7 @@ function myMove(id) {
       var time = setInterval(frame, 0);
       function frame() {
         if (vert >= 160 ) {
-          console.log(vert,horz);
+          console.log(id);
           clearInterval(time);
           myMove(id+1);
         } else {
