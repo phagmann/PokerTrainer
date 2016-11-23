@@ -26,7 +26,6 @@ function myMove(current) {
         var elem = document.getElementById( current.toString() );
         var vert = 0;
         var horz = 0;
-        var time = setInterval(frame, 0);
         function frame() {
         if (vert >= 220 ) {
           console.log(vert,horz);
@@ -43,16 +42,16 @@ function myMove(current) {
           elem.style.left = -1*horz + "px";
         };
       };
+        var time = setInterval(frame, 0);
+        
    }
 
     else if (current === 2 || current === 5){
       var elem = document.getElementById(current.toString());
       var vert = 0;
       var horz = 0;
-      var time = setInterval(frame, 0);
       function frame() {
         if (vert >= 200) {
-          console.log(vert,horz);
           clearInterval(time);
           myMove(current + 1);
         } 
@@ -62,6 +61,8 @@ function myMove(current) {
           elem.style.left = -1*horz + "px";
         };
       };
+      var time = setInterval(frame, 0);
+      
    }
 
 
