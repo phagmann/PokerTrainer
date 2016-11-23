@@ -22,7 +22,7 @@ function myMove(current) {
         return
       }
     if(current == 3 || current == 6){
-      var elem = document.getElementById(current.toString());
+      var elem = document.getElementById("g" + current.toString());
       var vert = 0;
       var horz = 0;
       var time = setInterval(frame, 0);
@@ -44,7 +44,7 @@ function myMove(current) {
    }
 
     else if(current == 2 || current == 5){
-      var elem = document.getElementById(current.toString());
+      var elem = document.getElementById("g" + current.toString());
       var vert = 0;
       var horz = 0;
       var time = setInterval(frame, 0);
@@ -63,7 +63,7 @@ function myMove(current) {
 
 
     else if(current == 1 || current == 4){
-      var elem = document.getElementById(current.toString());
+      var elem = document.getElementById("g" + current.toString());
       var vert = 0;
       var horz = 0;
       var time = setInterval(frame, 0);
