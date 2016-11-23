@@ -26,7 +26,7 @@ function myMove(current) {
         var elem = document.getElementById( current.toString() );
         var vert = 0;
         var horz = 0;
-        function frame() {
+        function frame1() {
         if (vert >= 220 ) {
           clearInterval(time);
           if (current === 6){
@@ -41,7 +41,7 @@ function myMove(current) {
           elem.style.left = -1*horz + "px";
         };
       };
-        var time = setInterval(frame, 1);
+        var time = setInterval(frame1, 1);
         
    }
 
@@ -49,7 +49,7 @@ function myMove(current) {
       var elem = document.getElementById(current.toString());
       var vert = 0;
       var horz = 0;
-      function frame() {
+      function frame2() {
         if (vert >= 200) {
           clearInterval(time);
           myMove(current + 1);
@@ -60,7 +60,7 @@ function myMove(current) {
           elem.style.left = -1*horz + "px";
         };
       };
-      var time = setInterval(frame, 1);
+      var time = setInterval(frame2, 1);
       
    }
 
@@ -69,7 +69,7 @@ function myMove(current) {
       var elem = document.getElementById( current.toString());
       var vert = 0;
       var horz = 0;
-      function frame() {
+      function frame3() {
         if (vert >= 160) {
           clearInterval(time);
           myMove(current + 1);
@@ -81,7 +81,7 @@ function myMove(current) {
           elem.style.left = -1*horz + "px";
         };
       };
-      var time = setInterval(frame, 1);
+      var time = setInterval(frame3, 1);
       
     }
   
