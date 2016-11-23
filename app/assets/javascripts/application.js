@@ -30,7 +30,7 @@ function myMove(current) {
         if (vert >= 220 ) {
           console.log(vert,horz);
           clearInterval(time);
-          if (current == 6){
+          if (current === 6){
             elem.style.left = -110 + "px";
           }
           myMove(current + 1);
