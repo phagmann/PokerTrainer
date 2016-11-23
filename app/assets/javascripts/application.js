@@ -21,9 +21,11 @@ function myMove(current) {
     if (current > 6) {
         return;
     }
-     console.log(current === 1 || current === 4);
+
+    console.log(current)
     if (current === 3 || current === 6) {
         var elem = document.getElementById( current.toString() );
+        console.log(elem);
         var vert = 0;
         var horz = 0;
         function frame1() {
@@ -32,7 +34,7 @@ function myMove(current) {
           if (current === 6){
             elem.style.left = -110 + "px";
           }
-          myMove(current + 1);
+          return myMove(current + 1);
          } 
         else {
           vert += 5;
@@ -47,12 +49,13 @@ function myMove(current) {
 
     else if (current === 2 || current === 5){
       var elem = document.getElementById(current.toString());
+      console.log(elem);
       var vert = 0;
       var horz = 0;
       function frame2() {
         if (vert >= 200) {
           clearInterval(time);
-          myMove(current + 1);
+          return myMove(current + 1);
         } 
         else {
           vert += 5;
@@ -67,12 +70,13 @@ function myMove(current) {
 
     else if (current === 1 || current === 4){
       var elem = document.getElementById( current.toString());
+      console.log(elem);
       var vert = 0;
       var horz = 0;
       function frame3() {
         if (vert >= 160) {
           clearInterval(time);
-          myMove(current + 1);
+          return myMove(current + 1);
         } 
         else {
           vert += 5;
@@ -83,6 +87,9 @@ function myMove(current) {
       };
       var time = setInterval(frame3, 1);
       
+    }
+    else{
+      return myMove(current + 1);
     }
   
 

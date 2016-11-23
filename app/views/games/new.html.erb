@@ -1,22 +1,21 @@
 <h1/> Texas Hold'em </h1>
 <!-- ♠ ♥ ♦ ♣ -->
 <!-- TODO: make a new.html/erb have the acutal game played on that. maybe a show.html.erb? -->
-<!--  -->
+<!-- <%# button_to("Deal Cards", new_hand_card_path, method: :get, :style => "position:relative; left:410px;top:100px; margin:0;", :onclick => "myMove(1);") %> -->
 
 <!-- <div class="element"> -->
 <body>
 
-<p>
 
-<%= button_to("Deal Cards", new_game_path, method: :get, :style => "position:relative; left:410px;top:100px; margin:0;") %>
-</p>
+<% display_hash = {'♠' => 'spades', '♥' => 'hearts', '♦' => 'diams', '♣' => 'clubs'} %>
+<% c1 = "card rank-" + @card1.rank.downcase + " " + display_hash[@card1.suit] %>
+<% c2 = "card rank-" + @card2.rank.downcase + " " + display_hash[@card2.suit] %>
+
 
 <div class="playingCards faceImages">
 
 
     <div class="card back">*</div>
-
-
 
 
 
@@ -30,19 +29,22 @@
 
 
 
- <li><div id="1" class="card back">*</div></li>
+
+
+
+<li><div id="1" class="card back">*</div></li>
  <li><div id="2" class="card back">*</div></li>
- <li><div id="3" class="card rank-7 spades">
-        <span class="rank">7</span>
-        <span class="suit">♠</span>
+<li><div id="3" class= "<%=c1%>">
+        <span class="rank"><%=@card1.rank%></span>
+        <span class="suit"><%=@card1.suit%></span>
     </div></li>
  <li><div id="4" class="card back">*</div></li>
   <li><div id="5" class="card back">*</div></li>
-  <li><div id="6" class="card rank-a diams">
-        <span class="rank">A</span>
-        <span class="suit">♦</span>
+   <li><div id="6" class= "<%=c2%>">
+        <span class="rank"><%=@card2.rank%></span>
+        <span class="suit"><%=@card2.suit%></span>
     </div></li>
-  <li><div id="7" class="card back">*</div></li>
+ <li><div id="7" class="card back">*</div></li>
   <li><div id="8" class="card back">*</div></li>
  <li><div id="9" class="card back">*</div></li>
  <li><div class="card back">*</div></li>
@@ -68,4 +70,7 @@
 
 <br/>
 </body>
+<script>
+  myMove(1)
+</script>
 <!-- </div> -->

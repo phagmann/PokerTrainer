@@ -17,6 +17,8 @@ ActiveRecord::Schema.define(version: 20161120233522) do
   enable_extension "plpgsql"
 
   create_table "cards", force: true do |t|
+    t.string   "rank"
+    t.string   "suit"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
