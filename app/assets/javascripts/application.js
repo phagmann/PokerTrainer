@@ -114,7 +114,7 @@ function myMove(current) {
       console.log(elem);
       var vert = 0;
       var horz = 0;
-      function frame4() {
+      function frame8() {
         if (horz >= 230) {
           clearInterval(time);
           return myMove(current + 1);
@@ -126,7 +126,7 @@ function myMove(current) {
           elem.style.left = -1*horz + "px";
         };
       };
-      var time = setInterval(frame4, 1);
+      var time = setInterval(frame8, 1);
       
     }
 
