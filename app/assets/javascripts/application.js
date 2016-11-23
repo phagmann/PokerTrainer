@@ -21,7 +21,7 @@ function myMove(current) {
       if (current > 6) {
         return;
       };
-    if(current === 3 || current === 6){
+    if (current === 3 || current === 6){
       var elem = document.getElementById( current.toString() );
       var vert = 0;
       var horz = 0;
@@ -30,20 +30,20 @@ function myMove(current) {
         if (vert >= 220 ) {
           console.log(vert,horz);
           clearInterval(time);
-          if(current == 6){
+          if (current == 6){
             elem.style.left = -110 + "px"
           }
-          myMove(current+1);
+          myMove(current + 1);
         } else {
-          vert +=5;
-          horz +=3.2;
+          vert += 5;
+          horz += 3.2;
           elem.style.top = vert  + "px";
           elem.style.left = -horz + "px";
         }
       }
    }
 
-    else if(current === 2 || current === 5){
+    else if (current === 2 || current === 5){
       var elem = document.getElementById(current.toString());
       var vert = 0;
       var horz = 0;
@@ -52,9 +52,9 @@ function myMove(current) {
         if (vert >= 200) {
           console.log(vert,horz);
           clearInterval(time);
-          myMove(current+1);
+          myMove(current + 1);
         } else {
-          vert +=5;
+          vert += 5;
           elem.style.top = -vert + "px";
           elem.style.left = -horz + "px";
         }
@@ -62,19 +62,19 @@ function myMove(current) {
    }
 
 
-    else if(current === 1 || current === 4){
+    else if (current === 1 || current === 4){
       var elem = document.getElementById( current.toString());
       var vert = 0;
       var horz = 0;
       var time = setInterval(frame, 0);
       function frame() {
-        if (vert >= 160 ) {
+        if (vert >= 160) {
           console.log(current);
           clearInterval(time);
-          myMove(current+1);
+          myMove(current + 1);
         } else {
-          vert +=5;
-          horz +=10;
+          vert += 5;
+          horz += 10;
           elem.style.top = -vert + "px";
           elem.style.left = -horz + "px";
         }
