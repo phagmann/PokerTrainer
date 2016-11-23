@@ -16,13 +16,13 @@
 //= require turbolinks
 //= require_tree .
 
-
+"use strict";
 function myMove(current) {
-      if (current > 6){
-        return
-      }
+      if (current > 6) {
+        return;
+      };
     if(current === 3 || current === 6){
-      var elem = document.getElementById( current.toString());
+      var elem = document.getElementById( current.toString() );
       var vert = 0;
       var horz = 0;
       var time = setInterval(frame, 0);
@@ -31,14 +31,14 @@ function myMove(current) {
           console.log(vert,horz);
           clearInterval(time);
           if(current == 6){
-            elem.style.left = -110 + 'px'
+            elem.style.left = -110 + "px"
           }
           myMove(current+1);
         } else {
           vert +=5;
           horz +=3.2;
-          elem.style.top = vert  + 'px';
-          elem.style.left = -horz + 'px';
+          elem.style.top = vert  + "px";
+          elem.style.left = -horz + "px";
         }
       }
    }
@@ -55,8 +55,8 @@ function myMove(current) {
           myMove(current+1);
         } else {
           vert +=5;
-          elem.style.top = -vert + 'px';
-          elem.style.left = -horz + 'px';
+          elem.style.top = -vert + "px";
+          elem.style.left = -horz + "px";
         }
       }
    }
@@ -75,19 +75,12 @@ function myMove(current) {
         } else {
           vert +=5;
           horz +=10;
-          elem.style.top = -vert + 'px';
-          elem.style.left = -horz + 'px';
+          elem.style.top = -vert + "px";
+          elem.style.left = -horz + "px";
         }
       }
     }
     
-
-
-
-
-
-
-
 
 }
 
