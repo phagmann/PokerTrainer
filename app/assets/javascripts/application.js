@@ -73,6 +73,9 @@ function myMove(current) {
       function frame2() {
         if (vert >= 200) {
           clearInterval(time);
+          if (current === 5){
+            elem.style.left = +30 + "px";
+          }
           return myMove(current + 1);
         } 
         else {
@@ -94,7 +97,9 @@ function myMove(current) {
       function frame3() {
         if (vert >= 160) {
           clearInterval(time);
-          
+          if (current === 4){
+            elem.style.left = -280 + "px";
+          }
           return myMove(current + 1);
         } 
         else {

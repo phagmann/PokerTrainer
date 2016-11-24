@@ -16,7 +16,36 @@ class GamesController < ApplicationController
         secondcard = @deck.pop[0]
         @card2.suit = secondcard[0]
         @card2.rank = secondcard[1..-1]
+
+        @deck = @deck.shuffle
+        @opp_c1 = Card.new
+        opp1card = @deck.pop[0]
+        @opp_c1.suit = opp1card[0]
+        @opp_c1.rank = opp1card[1..-1]
         
+
+        @deck = @deck.shuffle
+        @opp_c2 = Card.new
+        opp2card = @deck.pop[0]
+        @opp_c2.suit = opp2card[0]
+        @opp_c2.rank = opp2card[1..-1]
+
+        @deck = @deck.shuffle
+        @opp_c3 = Card.new
+        opp3card = @deck.pop[0]
+        @opp_c3.suit = opp3card[0]
+        @opp_c3.rank = opp3card[1..-1]
+
+
+        @deck = @deck.shuffle
+        @opp_c4 = Card.new
+        opp4card = @deck.pop[0]
+        @opp_c4.suit = opp4card[0]
+        @opp_c4.rank = opp4card[1..-1]
+
+
+
+
 
         @deck = @deck.shuffle
         @river1 = Card.new

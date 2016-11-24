@@ -7,20 +7,29 @@
 <body>
 
 
-<script> tracker = 10</script>
+<script> var trackerIndex = 0
+var tracker = [10,11,12]
+
+</script>
 <p>
-<button onclick="flip(tracker);tracker++;" style = "position:relative; left:410px;top:100px; margin:0;") > Flip Me </button>
+<button onclick="flip(tracker[trackerIndex]);trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;") > Flip Me </button>
 </p>
 
 
 <% display_hash = {'♠' => 'spades', '♥' => 'hearts', '♦' => 'diams', '♣' => 'clubs'} %>
 <% c1 = "card rank-" + @card1.rank.downcase + " " + display_hash[@card1.suit] %>
 <% c2 = "card rank-" + @card2.rank.downcase + " " + display_hash[@card2.suit] %>
+
 <% r1 = "card rank-" + @river1.rank.downcase + " " + display_hash[@river1.suit] %>
 <% r2 = "card rank-" + @river2.rank.downcase + " " + display_hash[@river2.suit] %>
 <% r3 = "card rank-" + @river3.rank.downcase + " " + display_hash[@river3.suit] %>
 <% f1 = "card rank-" + @flip1.rank.downcase + " " + display_hash[@flip1.suit] %>
 <% f2 = "card rank-" + @flip2.rank.downcase + " " + display_hash[@flip2.suit] %>
+
+<% o1 = "card rank-" + @opp_c1.rank.downcase + " " + display_hash[@opp_c1.suit] %>
+<% o2 = "card rank-" + @opp_c2.rank.downcase + " " + display_hash[@opp_c2.suit] %>
+<% o3 = "card rank-" + @opp_c3.rank.downcase + " " + display_hash[@opp_c3.suit] %>
+<% o4 = "card rank-" + @opp_c4.rank.downcase + " " + display_hash[@opp_c4.suit] %>
 
 <div class="playingCards faceImages">
 
@@ -137,6 +146,71 @@ if (current === 11){
  console.log(div)
 
   }
+ if(current === 12){
+   var div = document.getElementById("1");
+ div.className = "<%=o1%>"
+ div.innerHTML = null
+ var sp1 = document.createElement("SPAN");
+ sp1.className = "rank"
+ sp1.innerHTML = "<%=@opp_c1.rank%>"
+ div.appendChild(sp1);
+ var sp2 = document.createElement("SPAN");
+ sp2.className = "suit"
+ sp2.innerHTML = "<%=@opp_c1.suit%>"
+ div.appendChild(sp2);
+
+
+ var div = document.getElementById("2");
+ div.className = "<%=o2%>"
+ div.innerHTML = null
+ var sp1 = document.createElement("SPAN");
+ sp1.className = "rank"
+ sp1.innerHTML = "<%=@opp_c2.rank%>"
+ div.appendChild(sp1);
+ var sp2 = document.createElement("SPAN");
+ sp2.className = "suit"
+ sp2.innerHTML = "<%=@opp_c2.suit%>"
+ div.appendChild(sp2);
+
+
+ var div = document.getElementById("4");
+ div.className = "<%=o3%>"
+ div.innerHTML = null
+ var sp1 = document.createElement("SPAN");
+ sp1.className = "rank"
+ sp1.innerHTML = "<%=@opp_c3.rank%>"
+ div.appendChild(sp1);
+ var sp2 = document.createElement("SPAN");
+ sp2.className = "suit"
+ sp2.innerHTML = "<%=@opp_c3.suit%>"
+ div.appendChild(sp2);
+
+
+ var div = document.getElementById("5");
+ div.className = "<%=o4%>"
+ div.innerHTML = null
+ var sp1 = document.createElement("SPAN");
+ sp1.className = "rank"
+ sp1.innerHTML = "<%=@opp_c4.rank%>"
+ div.appendChild(sp1);
+ var sp2 = document.createElement("SPAN");
+ sp2.className = "suit"
+ sp2.innerHTML = "<%=@opp_c4.suit%>"
+ div.appendChild(sp2);
+
+ }
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
