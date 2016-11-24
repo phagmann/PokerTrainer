@@ -36,7 +36,17 @@ class GamesController < ApplicationController
         @river3.suit = river3card[0]
         @river3.rank = river3card[1..-1]
 
+        @deck = @deck.shuffle
+        @flip1 = Card.new
+        flip1card = @deck.pop[0]
+        @flip1.suit = flip1card[0]
+        @flip1.rank = flip1card[1..-1]
 
+        @deck = @deck.shuffle
+        @flip2 = Card.new
+        flip2card = @deck.pop[0]
+        @flip2.suit = flip2card[0]
+        @flip2.rank = flip2card[1..-1]
 
 
   end

@@ -7,12 +7,20 @@
 <body>
 
 
+<script> tracker = 10</script>
+<p>
+<button onclick="flip(tracker);tracker++;" style = "position:relative; left:410px;top:100px; margin:0;") > Flip Me </button>
+</p>
+
+
 <% display_hash = {'♠' => 'spades', '♥' => 'hearts', '♦' => 'diams', '♣' => 'clubs'} %>
 <% c1 = "card rank-" + @card1.rank.downcase + " " + display_hash[@card1.suit] %>
 <% c2 = "card rank-" + @card2.rank.downcase + " " + display_hash[@card2.suit] %>
 <% r1 = "card rank-" + @river1.rank.downcase + " " + display_hash[@river1.suit] %>
 <% r2 = "card rank-" + @river2.rank.downcase + " " + display_hash[@river2.suit] %>
 <% r3 = "card rank-" + @river3.rank.downcase + " " + display_hash[@river3.suit] %>
+<% f1 = "card rank-" + @flip1.rank.downcase + " " + display_hash[@flip1.suit] %>
+<% f2 = "card rank-" + @flip2.rank.downcase + " " + display_hash[@flip2.suit] %>
 
 <div class="playingCards faceImages">
 
@@ -35,11 +43,18 @@
 
 
 <li><div id="1" class="card back">*</div></li>
+
+
+
  <li><div id="2" class="card back">*</div></li>
+
 <li><div id="3" class= "<%=c1%>">
         <span class="rank"><%=@card1.rank%></span>
         <span class="suit"><%=@card1.suit%></span>
     </div></li>
+
+
+
  <li><div id="4" class="card back">*</div></li>
   <li><div id="5" class="card back">*</div></li>
    <li><div id="6" class= "<%=c2%>">
@@ -85,4 +100,46 @@
 <script>
   myMove(1)
 </script>
+
+<script>
+function flip(current){
+
+if (current === 10){
+ var div = document.getElementById(current.toString());
+ div.className = "<%=f1%>"
+ div.innerHTML = null
+
+ var sp1 = document.createElement("SPAN");
+ sp1.className = "rank"
+ sp1.innerHTML = "<%=@flip1.rank%>"
+ div.appendChild(sp1);
+
+ var sp2 = document.createElement("SPAN");
+ sp2.className = "suit"
+ sp2.innerHTML = "<%=@flip1.suit%>"
+ div.appendChild(sp2);
+ console.log(div)
+  }
+if (current === 11){
+ var div = document.getElementById(current.toString());
+ div.className = "<%=f2%>"
+ div.innerHTML = null
+
+ var sp1 = document.createElement("SPAN");
+ sp1.className = "rank"
+ sp1.innerHTML = "<%=@flip2.rank%>"
+ div.appendChild(sp1);
+
+ var sp2 = document.createElement("SPAN");
+ sp2.className = "suit"
+ sp2.innerHTML = "<%=@flip2.suit%>"
+ div.appendChild(sp2);
+ console.log(div)
+
+  }
+
+}
+
+</script>
+
 <!-- </div> -->

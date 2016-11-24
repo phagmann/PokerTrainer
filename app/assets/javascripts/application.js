@@ -17,15 +17,33 @@
 //= require_tree .
 
 
+
+
+// document.getElementById("successAndErrorMessages").innerHTML="someContent";
+// document.createElement("SPAN");
+// document.getElementById("myList").appendChild(node);
+
+
+
+// <li><div class="card back">*</div></li>
+ 
+// <li><div class= "<%=c1%>">
+//         <span class="rank"><%=@card1.rank%></span>
+//         <span class="suit"><%=@card1.suit%></span>
+//     </div></li>
+
+
+
+
 function myMove(current) {
     if (current > 11) {
         return;
     }
 
-    console.log(current)
+    
     if (current === 3 || current === 6) {
         var elem = document.getElementById( current.toString() );
-        console.log(elem);
+        
         var vert = 0;
         var horz = 0;
         function frame1() {
@@ -49,7 +67,7 @@ function myMove(current) {
 
     else if (current === 2 || current === 5){
       var elem = document.getElementById(current.toString());
-      console.log(elem);
+     
       var vert = 0;
       var horz = 0;
       function frame2() {
@@ -70,12 +88,13 @@ function myMove(current) {
 
     else if (current === 1 || current === 4){
       var elem = document.getElementById( current.toString());
-      console.log(elem);
+     
       var vert = 0;
       var horz = 0;
       function frame3() {
         if (vert >= 160) {
           clearInterval(time);
+          
           return myMove(current + 1);
         } 
         else {
@@ -90,7 +109,7 @@ function myMove(current) {
     }
     else if (current === 7){
       var elem = document.getElementById( current.toString());
-      console.log(elem);
+ 
       var vert = 0;
       var horz = 0;
       function frame4() {
@@ -111,7 +130,7 @@ function myMove(current) {
 
     else if (current === 8){
       var elem = document.getElementById( current.toString());
-      console.log(elem);
+   
       var vert = 0;
       var horz = 0;
       function frame8() {
@@ -132,7 +151,7 @@ function myMove(current) {
 
     else if (current === 9){
       var elem = document.getElementById( current.toString());
-      console.log(elem);
+      console.log(elem)
       var vert = 0;
       var horz = 0;
       function frame5() {
@@ -153,7 +172,6 @@ function myMove(current) {
 
     else if (current === 10){
       var elem = document.getElementById( current.toString());
-      console.log(elem);
       var vert = 0;
       var horz = 0;
       function frame6() {
@@ -174,7 +192,7 @@ function myMove(current) {
 
     else if (current === 11){
       var elem = document.getElementById( current.toString());
-      console.log(elem);
+      
       var vert = 0;
       var horz = 0;
       function frame7() {
