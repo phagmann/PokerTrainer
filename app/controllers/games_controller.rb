@@ -1,9 +1,6 @@
+require './lib/compare.rb'
 class GamesController < ApplicationController
   def index
-  end
-
-  def new
-
         @deck = generate_deck.shuffle
         @card1 = Card.new
         firstcard = @deck.pop[0]
@@ -76,6 +73,10 @@ class GamesController < ApplicationController
         flip2card = @deck.pop[0]
         @flip2.suit = flip2card[0]
         @flip2.rank = flip2card[1..-1]
+
+  end
+
+  def new
 
 
   end
