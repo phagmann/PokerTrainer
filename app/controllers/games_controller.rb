@@ -58,6 +58,17 @@ class GamesController < ApplicationController
 
   end
 
+  def update
+    @game = Game.find(params[:id])
+    Hand.destroy_all( game_id: @game.id, player_id: 3 )
+    Hand.destroy_all( game_id: @game.id, player_id: 1 )
+    Hand.destroy_all( game_id: @game.id, player_id: 2 )
+    River.destroy_all(game_id: @game.id)
+
+    @game.deal_cards(Player.find_by_email("phagmann1@gmail.com"))
+    redirect_to(game_path)
+  end
+
   def destroy
     @game = Game.find(params[:id])
     @game.destroy

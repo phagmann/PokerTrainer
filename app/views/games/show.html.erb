@@ -17,9 +17,15 @@ var trackerIndex = 0
 var tracker = [10,11,12]
 
 </script>
+<%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
+
 <p>
 <button onclick="flip(tracker[trackerIndex]);trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;") > Flip Me </button>
+
+
 </p>
+
+
 
 
 <% display_hash = {'♠' => 'spades', '♥' => 'hearts', '♦' => 'diams', '♣' => 'clubs'} %>
@@ -40,7 +46,8 @@ var tracker = [10,11,12]
 <div class="playingCards faceImages">
 
 
-    <%= link_to "back", root_path %>
+<%= link_to "Back", root_path %>
+
 <% track_place = 0 %>
 <% rank_score = ["First", "Second", "Third"] %>
 <% @score.each do |set| %>

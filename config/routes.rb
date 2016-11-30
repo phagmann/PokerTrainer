@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   root "games#index"
   devise_for :players
   resources :menus, only: [:index]
-  resources :games, only: [:index, :create, :show, :destroy]
+  resources :games, only: [:index, :create, :show, :update, :destroy]
   resources :chips, only: [:index]
 
   # Example of regular route:
