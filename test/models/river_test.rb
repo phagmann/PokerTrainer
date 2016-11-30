@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DeckTest < ActiveSupport::TestCase
+class RiverTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

@@ -5,12 +5,11 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
-  root "menus#index"
+  root "games#index"
   devise_for :players
-  resources :games, only: [:index, :new]
-  namespace :hand do 
-    resources :cards, only: [:new]
-  end
+  resources :menus, only: [:index]
+  resources :games, only: [:index, :create, :show, :destroy]
+  resources :chips, only: [:index]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

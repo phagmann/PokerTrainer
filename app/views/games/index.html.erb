@@ -1,219 +1,39 @@
-<h1/> Texas Hold'em </h1>
-<!-- ♠ ♥ ♦ ♣ -->
-<!-- TODO: make a new.html/erb have the acutal game played on that. maybe a show.html.erb? -->
-<!-- <%# button_to("Deal Cards", new_hand_card_path, method: :get, :style => "position:relative; left:410px;top:100px; margin:0;", :onclick => "myMove(1);") %> -->
+<link rel="stylesheet" href="chips.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
-<!-- <div class="element"> -->
-<body>
+<h1> Learn how to Play Poker like a Pro </h1>
 
-
-<script> var trackerIndex = 0
-var tracker = [10,11,12]
-
-</script>
-<p>
-<button onclick="flip(tracker[trackerIndex]);trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;") > Flip Me </button>
-</p>
-
-
-<% display_hash = {'♠' => 'spades', '♥' => 'hearts', '♦' => 'diams', '♣' => 'clubs'} %>
-<% c1 = "card rank-" + @card1.rank.downcase + " " + display_hash[@card1.suit] %>
-<% c2 = "card rank-" + @card2.rank.downcase + " " + display_hash[@card2.suit] %>
-
-<% r1 = "card rank-" + @river1.rank.downcase + " " + display_hash[@river1.suit] %>
-<% r2 = "card rank-" + @river2.rank.downcase + " " + display_hash[@river2.suit] %>
-<% r3 = "card rank-" + @river3.rank.downcase + " " + display_hash[@river3.suit] %>
-<% f1 = "card rank-" + @flip1.rank.downcase + " " + display_hash[@flip1.suit] %>
-<% f2 = "card rank-" + @flip2.rank.downcase + " " + display_hash[@flip2.suit] %>
-
-<% o1 = "card rank-" + @opp_c1.rank.downcase + " " + display_hash[@opp_c1.suit] %>
-<% o2 = "card rank-" + @opp_c2.rank.downcase + " " + display_hash[@opp_c2.suit] %>
-<% o3 = "card rank-" + @opp_c3.rank.downcase + " " + display_hash[@opp_c3.suit] %>
-<% o4 = "card rank-" + @opp_c4.rank.downcase + " " + display_hash[@opp_c4.suit] %>
-
-<div class="playingCards faceImages">
-
-
-    <div class="card back">*</div>
-
-
-
-
-
-<div style="position:relative; left:200px; margin:0;">
-
- <div class="circle">
-
-<ul class="deck" style="position:relative; top:180px; left:350px;">
-
-
-
-
-
-
-<li><div id="1" class="card back">*</div></li>
-
-
-
- <li><div id="2" class="card back">*</div></li>
-
-<li><div id="3" class= "<%=c1%>">
-        <span class="rank"><%=@card1.rank%></span>
-        <span class="suit"><%=@card1.suit%></span>
-    </div></li>
-
-
-
- <li><div id="4" class="card back">*</div></li>
-  <li><div id="5" class="card back">*</div></li>
-   <li><div id="6" class= "<%=c2%>">
-        <span class="rank"><%=@card2.rank%></span>
-        <span class="suit"><%=@card2.suit%></span>
-    </div></li>
- <li><div id="7" class="<%=r1%>">
-        <span class="rank"><%=@river1.rank%></span>
-        <span class="suit"><%=@river1.suit%></span>
- </div></li>
-  <li><div id="8" class="<%=r2%>">
-        <span class="rank"><%=@river2.rank%></span>
-        <span class="suit"><%=@river2.suit%></span>
-  </div></li>
- <li><div id="9" class="<%=r3%>">
-        <span class="rank"><%=@river3.rank%></span>
-        <span class="suit"><%=@river3.suit%></span>
- </div></li>
- <li><div id="10" class="card back">*</div></li>
-  <li><div id="11" class="card back">*</div></li>
-   <li><div class="card back">*</div></li>
-    <li><div class="card back">*</div></li>
-     <li><div class="card back">*</div></li>
-      <li><div class="card back">*</div></li>
-       <li><div class="card back">*</div></li>
-        <li><div class="card back">*</div></li>
-        <li><div class="card back">*</div></li>
-        <li><div class="card back">*</div></li>
-    
-
-</ul>
-</div>
-
-</div>
-
-</div>
-
+<%= link_to "Learn More About Me", "https://phagmann.github.io/", :target => "_blank" %>
 <br/>
 <br/>
 
-<br/>
-</body>
-<script>
-  myMove(1)
-</script>
+<%= link_to "Play Poker!", games_path, method: :post %>
+<div class="form_circle">
+<div class="fish red">
+  <div></div>
+</div> 
+</div>
+<table>
 
-<script>
-function flip(current){
+  <thead>
 
-if (current === 10){
- var div = document.getElementById(current.toString());
- div.className = "<%=f1%>"
- div.innerHTML = null
+    <tr>
+      <th> <u><h2> Name </h2></u> </th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
 
- var sp1 = document.createElement("SPAN");
- sp1.className = "rank"
- sp1.innerHTML = "<%=@flip1.rank%>"
- div.appendChild(sp1);
+  
+    <% @games.each do |game| %>
+      <tr>
 
- var sp2 = document.createElement("SPAN");
- sp2.className = "suit"
- sp2.innerHTML = "<%=@flip1.suit%>"
- div.appendChild(sp2);
- console.log(div)
-  }
-if (current === 11){
- var div = document.getElementById(current.toString());
- div.className = "<%=f2%>"
- div.innerHTML = null
+        <td><h3><%= game.id %></h3></td>
+        <td><button><%= link_to 'Play', game_path(game) %></button></td>
+        <td><button><%= link_to 'Delete', game_path(game), method: :delete %></button></td>
 
- var sp1 = document.createElement("SPAN");
- sp1.className = "rank"
- sp1.innerHTML = "<%=@flip2.rank%>"
- div.appendChild(sp1);
-
- var sp2 = document.createElement("SPAN");
- sp2.className = "suit"
- sp2.innerHTML = "<%=@flip2.suit%>"
- div.appendChild(sp2);
- console.log(div)
-
-  }
- if(current === 12){
-   var div = document.getElementById("1");
- div.className = "<%=o1%>"
- div.innerHTML = null
- var sp1 = document.createElement("SPAN");
- sp1.className = "rank"
- sp1.innerHTML = "<%=@opp_c1.rank%>"
- div.appendChild(sp1);
- var sp2 = document.createElement("SPAN");
- sp2.className = "suit"
- sp2.innerHTML = "<%=@opp_c1.suit%>"
- div.appendChild(sp2);
+      </tr>
+    <% end %>
 
 
- var div = document.getElementById("2");
- div.className = "<%=o2%>"
- div.innerHTML = null
- var sp1 = document.createElement("SPAN");
- sp1.className = "rank"
- sp1.innerHTML = "<%=@opp_c2.rank%>"
- div.appendChild(sp1);
- var sp2 = document.createElement("SPAN");
- sp2.className = "suit"
- sp2.innerHTML = "<%=@opp_c2.suit%>"
- div.appendChild(sp2);
+  
+</table>
 
-
- var div = document.getElementById("4");
- div.className = "<%=o3%>"
- div.innerHTML = null
- var sp1 = document.createElement("SPAN");
- sp1.className = "rank"
- sp1.innerHTML = "<%=@opp_c3.rank%>"
- div.appendChild(sp1);
- var sp2 = document.createElement("SPAN");
- sp2.className = "suit"
- sp2.innerHTML = "<%=@opp_c3.suit%>"
- div.appendChild(sp2);
-
-
- var div = document.getElementById("5");
- div.className = "<%=o4%>"
- div.innerHTML = null
- var sp1 = document.createElement("SPAN");
- sp1.className = "rank"
- sp1.innerHTML = "<%=@opp_c4.rank%>"
- div.appendChild(sp1);
- var sp2 = document.createElement("SPAN");
- sp2.className = "suit"
- sp2.innerHTML = "<%=@opp_c4.suit%>"
- div.appendChild(sp2);
-
- }
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-</script>
-
-<!-- </div> -->

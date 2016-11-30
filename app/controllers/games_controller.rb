@@ -1,98 +1,80 @@
 require './lib/compare.rb'
 class GamesController < ApplicationController
+  # load = Card.where(id: human1.pluck("card_id")) + Card.where(id: river.pluck("card_id"))
   def index
-        @deck = generate_deck.shuffle
-        @card1 = Card.new
-        firstcard = @deck.pop[0]
-        @card1.suit = firstcard[0]
-        @card1.rank = firstcard[1..-1]
-        
+    @games = Game.all
+  end
 
-        @deck = @deck.shuffle
-        @card2 = Card.new
-        secondcard = @deck.pop[0]
-        @card2.suit = secondcard[0]
-        @card2.rank = secondcard[1..-1]
+  def create
+    g = Game.create
+    g.deal_cards(Player.find_by_email("phagmann1@gmail.com"))
+    redirect_to (game_path(g.id))
+  end
 
-        @deck = @deck.shuffle
-        @opp_c1 = Card.new
-        opp1card = @deck.pop[0]
-        @opp_c1.suit = opp1card[0]
-        @opp_c1.rank = opp1card[1..-1]
-        
+  def show
+    @game = Game.find(params[:id])
 
-        @deck = @deck.shuffle
-        @opp_c2 = Card.new
-        opp2card = @deck.pop[0]
-        @opp_c2.suit = opp2card[0]
-        @opp_c2.rank = opp2card[1..-1]
+    human1 =  Hand.where( game_id: @game.id, player_id: 3 ).order(card_id: :asc)
+    @card1 = Card.find_by( id: human1[0].card_id )
+    @card2 = Card.find_by( id: human1[1].card_id )
 
-        @deck = @deck.shuffle
-        @opp_c3 = Card.new
-        opp3card = @deck.pop[0]
-        @opp_c3.suit = opp3card[0]
-        @opp_c3.rank = opp3card[1..-1]
+    comp1 = Hand.where( game_id: @game.id, player_id: 1 ).order(card_id: :asc)
+    @opp_c1 = Card.find_by( id: comp1[0].card_id )
+    @opp_c2 = Card.find_by( id: comp1[1].card_id )
 
 
-        @deck = @deck.shuffle
-        @opp_c4 = Card.new
-        opp4card = @deck.pop[0]
-        @opp_c4.suit = opp4card[0]
-        @opp_c4.rank = opp4card[1..-1]
+    comp2 = Hand.where( game_id: @game.id, player_id: 2 ).order(card_id: :asc)
+    @opp_c3 = Card.find_by( id: comp2[0].card_id )
+    @opp_c4 = Card.find_by( id: comp2[1].card_id )
+
+    river = River.where(game_id: @game.id)
+    @river1 = Card.find_by(id: river[0].card_id)
+    @river2 = Card.find_by(id: river[1].card_id)
+    @river3 = Card.find_by(id: river[2].card_id)
+    @flip1 = Card.find_by(id: river[3].card_id)
+    @flip2 = Card.find_by(id: river[4].card_id)
+    # load = Card.find([23,8,9,7,24])
+    # pp load
+    # pp Compare.straight?(load)
+    shared_cards = Card.where(id: river.pluck("card_id"))
+
+    load3 = Card.where(id: human1.pluck("card_id")) + shared_cards
+    load2 = Card.where(id: comp2.pluck("card_id")) + shared_cards
+    load1 = Card.where(id: comp1.pluck("card_id")) + shared_cards
 
 
 
-
-
-        @deck = @deck.shuffle
-        @river1 = Card.new
-        river1card = @deck.pop[0]
-        @river1.suit = river1card[0]
-        @river1.rank = river1card[1..-1]
-
-        @deck = @deck.shuffle
-        @river2 = Card.new
-        river2card = @deck.pop[0]
-        @river2.suit = river2card[0]
-        @river2.rank = river2card[1..-1]
-
-        @deck = @deck.shuffle
-        @river3 = Card.new
-        river3card = @deck.pop[0]
-        @river3.suit = river3card[0]
-        @river3.rank = river3card[1..-1]
-
-        @deck = @deck.shuffle
-        @flip1 = Card.new
-        flip1card = @deck.pop[0]
-        @flip1.suit = flip1card[0]
-        @flip1.rank = flip1card[1..-1]
-
-        @deck = @deck.shuffle
-        @flip2 = Card.new
-        flip2card = @deck.pop[0]
-        @flip2.suit = flip2card[0]
-        @flip2.rank = flip2card[1..-1]
+    @score = Compare.win_order([Player.find_by(id: comp1.first.player_id), Player.find_by(id: comp2.first.player_id), Player.find_by(id: human1.first.player_id)] ,[load1,load2,load3])
+    # pp Compare.high_card(load)
+    # pp "==========================================="
+    # pp Compare.pair?(load)
+    # pp "==========================================="
+    # pp Compare.straight?(load)
+    # pp "==========================================="
+    # pp Compare.full_house?(load)
+    # pp "==========================================="
+    # pp Compare.straight_flush?(load)
+    # pp "==========================================="
 
   end
 
-  def new
-
-
+  def destroy
+    @game = Game.find(params[:id])
+    @game.destroy
+    redirect_to(games_path)
   end
 
-  private 
+ private 
 
-  def generate_deck
-        decks = []
-        suits = ["♠", "♥", "♦", "♣"]
-        ranks = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
-        suits.each do |suit|
-            ranks.each do |rank|
-                decks << [suit + rank]
-            end
-        end
-        return decks
 
+
+  def card_value_conversion_hash 
+    hashy = {}
+    ranks = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
+    (0..(ranks.length - 1) ).each do |ind|
+        hashy[ranks[ind]] = ind
     end
+    return hashy
+  end
+
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161120233522) do
+ActiveRecord::Schema.define(version: 20161127192729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,17 +28,24 @@ ActiveRecord::Schema.define(version: 20161120233522) do
     t.datetime "updated_at"
   end
 
-  create_table "decks", force: true do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "games", force: true do |t|
+    t.integer  "player1_id"
+    t.integer  "player2_id"
+    t.integer  "player3_id"
+    t.integer  "player4_id"
+    t.integer  "river1_id"
+    t.integer  "river2_id"
+    t.integer  "river3_id"
+    t.integer  "river4_id"
+    t.integer  "river5_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "hands", force: true do |t|
+    t.integer  "game_id"
+    t.integer  "player_id"
+    t.integer  "card_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -60,5 +67,12 @@ ActiveRecord::Schema.define(version: 20161120233522) do
 
   add_index "players", ["email"], name: "index_players_on_email", unique: true, using: :btree
   add_index "players", ["reset_password_token"], name: "index_players_on_reset_password_token", unique: true, using: :btree
+
+  create_table "rivers", force: true do |t|
+    t.integer  "game_id"
+    t.integer  "card_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
 end
