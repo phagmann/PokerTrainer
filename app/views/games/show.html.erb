@@ -6,7 +6,6 @@
 <!-- <div class="element"> -->
 <body>
 
-<script ></script>
 
 
 
@@ -17,13 +16,14 @@ var trackerIndex = 0
 var tracker = [10,11,12]
 
 </script>
+
 <%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
 
-<p>
+
 <button onclick="flip(tracker[trackerIndex]);trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;") > Flip Me </button>
 
 
-</p>
+
 
 
 
@@ -48,17 +48,14 @@ var tracker = [10,11,12]
 
 <%= link_to "Back", root_path %>
 
-<% track_place = 0 %>
-<% rank_score = ["First", "Second", "Third"] %>
-<% @score.each do |set| %>
-  <% set.each do |n| %>
-      <h3 ><%=  "#{rank_score[track_place]}: #{n}" %></h3>
-  <% end %>
-   <% track_place += 1%>
-<% end %>
+<div class="col-xs-10" id="a" style="position:relative; right:200px;">
 
+<h3>h</h3>
+<h3>e</h3>
+<h3>y</h3>
 
-
+</div>
+ 
 
 
 <div style="position:relative; left:200px; margin:0;">
@@ -168,6 +165,20 @@ if (current === 11){
 
   }
  if(current === 12){
+ var div = document.getElementById("a");
+div.innerHTML = "<% track_place = 0 %>"
+div.innerHTML += "<% rank_score = ['First', 'Second', 'Third'] %>"
+div.innerHTML += "<% @score.each do |set| %>"
+div.innerHTML += "<% set.each do |n| %>"
+div.innerHTML += "<h3 ><%= rank_score[track_place].to_s + ": " + n.to_s%></h3>"
+div.innerHTML += "<% end %>"
+div.innerHTML += "<% track_place += 1%>"
+div.innerHTML += "<% end %>"
+
+
+
+
+
  var div = document.getElementById("1");
  div.className = "<%=o1%>"
  div.innerHTML = null
