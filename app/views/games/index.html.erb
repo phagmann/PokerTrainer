@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="chips.css" type="text/css" media="screen" title="no title" charset="utf-8">
 
 <h1> Learn how to Play Poker like a Pro </h1>
+<% if player_signed_in? %>
+        <li><%= link_to 'Sign out', destroy_player_session_path, method: :delete %></li>
+  <h2> You have <%= current_player.chips_bank %> Chips in your Bank! </h2>
 
 <%= link_to "Learn More About Me", "https://phagmann.github.io/", :target => "_blank" %>
 <br/>
@@ -33,6 +36,12 @@
       </tr>
     <% end %>
 
+<% else %>
+
+        <li><%= link_to 'Sign in', new_player_session_path %></li>
+        <li><%= link_to 'Sign up', new_player_registration_path %></li>
+
+<% end %>
 
   
 </table>

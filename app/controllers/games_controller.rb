@@ -7,14 +7,15 @@ class GamesController < ApplicationController
 
   def create
     g = Game.create
-    g.deal_cards(Player.find_by_email("phagmann1@gmail.com"))
+    g.deal_cards(current_player)
+    Pot.create(game_id: g.id)
     redirect_to (game_path(g.id))
   end
 
   def show
     @game = Game.find(params[:id])
 
-    human1 =  Hand.where( game_id: @game.id, player_id: 3 ).order(card_id: :asc)
+    human1 =  Hand.where( game_id: @game.id, player_id: current_player.id ).order(card_id: :asc)
     @card1 = Card.find_by( id: human1[0].card_id )
     @card2 = Card.find_by( id: human1[1].card_id )
 
@@ -60,12 +61,12 @@ class GamesController < ApplicationController
 
   def update
     @game = Game.find(params[:id])
-    Hand.destroy_all( game_id: @game.id, player_id: 3 )
+    Hand.destroy_all( game_id: @game.id, player_id: current_player.id )
     Hand.destroy_all( game_id: @game.id, player_id: 1 )
     Hand.destroy_all( game_id: @game.id, player_id: 2 )
     River.destroy_all(game_id: @game.id)
 
-    @game.deal_cards(Player.find_by_email("phagmann1@gmail.com"))
+    @game.deal_cards(current_player)
     redirect_to(game_path)
   end
 

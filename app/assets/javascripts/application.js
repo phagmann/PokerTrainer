@@ -32,6 +32,26 @@
 //         <span class="suit"><%=@card1.suit%></span>
 //     </div></li>
 
+function stringToArray(string){
+  var current = ""
+  var final = []
+  for (var i = 1; i < string.length; i++){
+      ii = string[i]
+      if(ii == "," || ii == "]" ){
+          final.push(current) 
+          current = ""
+      }
+      else{
+          current += ii
+      }
+      
+  }
+  return final
+}
+
+
+
+
 
 
 

@@ -16,4 +16,3 @@ suits.each do |suit|
 end
 Player.create(email: "p1@comp.com", password: "testtest", password_confirmation: "testtest")
 Player.create(email: "p2@comp.com", password: "testtest", password_confirmation: "testtest")
-Player.create(email: "phagmann1@gmail.com", password: "testtest", password_confirmation: "testtest")

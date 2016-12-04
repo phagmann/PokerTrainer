@@ -14,6 +14,7 @@
 
 var trackerIndex = 0
 var tracker = [10,11,12]
+// TODO: changes to database, cards, in JS
 
 </script>
 
@@ -22,8 +23,8 @@ var tracker = [10,11,12]
 
 <button onclick="flip(tracker[trackerIndex]);trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;") > Flip Me </button>
 
-
-
+<% my_hand = Hand.where( card_id: [@card1.id, @card2.id]) %>
+<button onclick="fold('<%= my_hand.pluck(:id) %>', true)" style = "position:relative; left:410px;top:50px; margin:0;") > Fold </button>
 
 
 
@@ -65,7 +66,11 @@ var tracker = [10,11,12]
 <ul class="deck" style="position:relative; top:180px; left:350px;">
 
 
-
+<div class="form_circle" style="position:relative;bottom:110px;right:150px;">
+<div class="fish red" style="width: 70px;height: 70px;">
+  <div><%= Pot.find_by(game_id: @game.id).total_chips %></div>
+</div> 
+</div>
 
 
 
@@ -110,6 +115,8 @@ var tracker = [10,11,12]
         <li><div class="card back">*</div></li>
         <li><div class="card back">*</div></li>
         <li><div class="card back">*</div></li>
+
+        <!-- FOLDING: style="background:black;" -->
     
 
 </ul>
@@ -129,6 +136,23 @@ var tracker = [10,11,12]
 </script>
 
 <script>
+
+function fold(cards,bool){
+cards = stringToArray(cards)
+console.log(cards)
+$(function() {
+$.get('/hands/' + cards[0]).success( function( data ) {
+  console.log(data)
+}
+// for(var trace_cards = 0; trace_cards < cards.length; trace_cards++){
+//   var current = cards[trace_cards]
+//   current.fold = true
+//   console.log(current)
+// }
+
+  )}
+
+)}
 function flip(current){
 
 if (current === 10){

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161127192729) do
+ActiveRecord::Schema.define(version: 20161202234727) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,9 @@ ActiveRecord::Schema.define(version: 20161127192729) do
   end
 
   create_table "chips", force: true do |t|
+    t.integer  "game_id"
+    t.integer  "player_id"
+    t.integer  "chips_in_game"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -46,27 +49,36 @@ ActiveRecord::Schema.define(version: 20161127192729) do
     t.integer  "game_id"
     t.integer  "player_id"
     t.integer  "card_id"
+    t.boolean  "fold",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "players", force: true do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                  default: "",  null: false
+    t.string   "encrypted_password",     default: "",  null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",          default: 0,   null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.integer  "chips_bank",             default: 500
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "players", ["email"], name: "index_players_on_email", unique: true, using: :btree
   add_index "players", ["reset_password_token"], name: "index_players_on_reset_password_token", unique: true, using: :btree
+
+  create_table "pots", force: true do |t|
+    t.integer  "game_id"
+    t.integer  "total_chips", default: 0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "rivers", force: true do |t|
     t.integer  "game_id"
