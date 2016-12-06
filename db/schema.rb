@@ -49,7 +49,8 @@ ActiveRecord::Schema.define(version: 20161202234727) do
     t.integer  "game_id"
     t.integer  "player_id"
     t.integer  "card_id"
-    t.boolean  "fold",       default: false
+    t.string   "positions_id"
+    t.boolean  "fold",         default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

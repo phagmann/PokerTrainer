@@ -46,6 +46,8 @@ class GamesController < ApplicationController
 
 
     @score = Compare.win_order([Player.find_by(id: comp1.first.player_id), Player.find_by(id: comp2.first.player_id), Player.find_by(id: human1.first.player_id)] ,[load1,load2,load3])
+    pp "================="
+    pp @score
     # pp Compare.high_card(load)
     # pp "==========================================="
     # pp Compare.pair?(load)

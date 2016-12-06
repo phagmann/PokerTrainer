@@ -9,7 +9,6 @@
 
 
 
-
 <script> 
 
 var trackerIndex = 0
@@ -23,7 +22,7 @@ var tracker = [10,11,12]
 
 <button onclick="flip(tracker[trackerIndex]);trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;") > Flip Me </button>
 
-<% my_hand = Hand.where( card_id: [@card1.id, @card2.id]) %>
+<% my_hand = Hand.where( game_id: @game.id, card_id: [@card1.id, @card2.id]) %>
 <button onclick="fold('<%= my_hand.pluck(:id) %>', true)" style = "position:relative; left:410px;top:50px; margin:0;") > Fold </button>
 
 
@@ -139,20 +138,29 @@ var tracker = [10,11,12]
 
 function fold(cards,bool){
 cards = stringToArray(cards)
-console.log(cards)
+// something about
 $(function() {
-$.get('/hands/' + cards[0]).success( function( data ) {
+for ( var i= 0; i < cards.length; i++){
+$.post('/hands/' + cards[i], {
+        _method: "PUT",
+        hand: {
+          fold: bool
+        }
+      }).success (function(data) {
   console.log(data)
+  div = document.getElementById(data.positions_id)
+  div.className = "card back"
+  div.style= "background:black;top:" + div.style.top.toString() + ";left:" + div.style.left.toString()
+  div.innerHTML = "*"
 }
 // for(var trace_cards = 0; trace_cards < cards.length; trace_cards++){
 //   var current = cards[trace_cards]
 //   current.fold = true
 //   console.log(current)
 // }
+  )}}
+ )}
 
-  )}
-
-)}
 function flip(current){
 
 if (current === 10){
@@ -189,12 +197,20 @@ if (current === 11){
 
   }
  if(current === 12){
- var div = document.getElementById("a");
+// fix this! innerHTML part is getting triggered after page loads.
+console.log("WTF")
+var div = window.document.getElementById("a");
 div.innerHTML = "<% track_place = 0 %>"
 div.innerHTML += "<% rank_score = ['First', 'Second', 'Third'] %>"
 div.innerHTML += "<% @score.each do |set| %>"
 div.innerHTML += "<% set.each do |n| %>"
+div.innerHTML += "<% pp '==!===W===!==T==!==F==!=='%>"
+div.innerHTML += "<% pp Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.scrap_email(n.to_s)).id ) %>"
+div.innerHTML += "<% if Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.scrap_email(n.to_s)).id ).fold === false%>"
 div.innerHTML += "<h3 ><%= rank_score[track_place].to_s + ": " + n.to_s%></h3>"
+div.innerHTML += "<% else  %>"
+div.innerHTML += "<h3 ><%= rank_score[track_place].to_s + ": Folded" %></h3>"
+div.innerHTML += "<% end %>"
 div.innerHTML += "<% end %>"
 div.innerHTML += "<% track_place += 1%>"
 div.innerHTML += "<% end %>"

@@ -176,7 +176,6 @@ function myMove(current) {
 
     else if (current === 9){
       var elem = document.getElementById( current.toString());
-      console.log(elem)
       var vert = 0;
       var horz = 0;
       function frame5() {

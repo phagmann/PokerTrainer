@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :menus, only: [:index]
   resources :games, only: [:index, :create, :show, :update, :destroy]
   resources :chips, only: [:index]
-  resources :hands, only: [:show]
+  resources :hands, only: [:show, :update]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

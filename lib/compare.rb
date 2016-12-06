@@ -264,6 +264,13 @@ class Compare
     
     end
 
+    def self.scrap_email(string)
+        email=""
+        string.each_char do |char|
+            if char != ":" then email += char else return email end
+        end
+    end
+
     
 
 
