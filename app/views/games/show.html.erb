@@ -17,11 +17,15 @@ var tracker = [10,11,12]
 
 <%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
 
-
-<button onclick="flip(tracker[trackerIndex]);trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;") > Flip Me </button>
+<% hh1 = [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[0])).id]  %>
+<% hh1 += [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[1])).id]  %>
+<% hh1 += [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[2])).id] %>
+<% pp hh1 %>
+<button onclick="flip(tracker[trackerIndex], <%= @score %>, <%= hh1 %> );trackerIndex++;potTest(<%= @game.id %>);potShow();" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
 
 <% my_hand = Hand.where( game_id: @game.id, card_id: [@card1.id, @card2.id]) %>
-<button onclick="fold('<%= my_hand.pluck(:id) %>', true)" style = "position:relative; left:410px;top:50px; margin:0;") > Fold </button>
+<% pp my_hand %>
+<button onclick="fold('<%= my_hand.pluck(:id) %>', true)" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
 
 
 
@@ -65,7 +69,7 @@ var tracker = [10,11,12]
 
 <div class="form_circle" style="position:relative;bottom:110px;right:150px;">
 <div class="fish red" style="width: 70px;height: 70px;">
-  <div><%= Pot.find_by(game_id: @game.id).total_chips %></div>
+  <div id="b"> <%= Pot.find(@game.id).total_chips %></div>
 </div> 
 </div>
 
@@ -133,6 +137,26 @@ var tracker = [10,11,12]
 </script>
 
 <script>
+function potShow(){
+
+$.get('/pots/' + "<%= @game.id.to_s %>").success (function(data) {
+  var div = document.getElementById("b");
+  div.innerHTML = data.total_chips;
+})}
+
+
+function potTest(gameID){
+  
+
+$.post('/pots/' + gameID.toString(), {
+        _method: "PUT",
+        pot: {
+          total_chips: 1
+        }
+      }).success (function(data) {
+      
+
+})}
 
 function fold(cards,bool){
 cards = stringToArray(cards)
@@ -145,7 +169,6 @@ $.post('/hands/' + cards[i], {
           fold: bool
         }
       }).success (function(data) {
-  console.log(data)
   div = document.getElementById(data.positions_id)
   div.className = "card back"
   div.style= "background:black;top:" + div.style.top.toString() + ";left:" + div.style.left.toString()
@@ -156,10 +179,12 @@ $.post('/hands/' + cards[i], {
 //   current.fold = true
 //   console.log(current)
 // }
-  )}}
+  )}
+
+    }
  )}
 
-function flip(current){
+function flip(current, score, hands){
 
 if (current === 10){
  var div = document.getElementById(current.toString());
@@ -175,7 +200,6 @@ if (current === 10){
  sp2.className = "suit"
  sp2.innerHTML = "<%=@flip1.suit%>"
  div.appendChild(sp2);
- console.log(div)
   }
 if (current === 11){
  var div = document.getElementById(current.toString());
@@ -191,33 +215,28 @@ if (current === 11){
  sp2.className = "suit"
  sp2.innerHTML = "<%=@flip2.suit%>"
  div.appendChild(sp2);
- console.log(div)
 
   }
  if(current === 12){
 // fix this! innerHTML part is getting triggered after page loads.
-
-console.log("WTF")
-var div = window.document.getElementById("a");
-div.innerHTML = "<% track_place = 0 %>"
-div.innerHTML += "<% rank_score = ['First', 'Second', 'Third'] %>"
-div.innerHTML += "<% @score.each do |set| %>"
-div.innerHTML += "<% set.each do |n| %>"
-div.innerHTML += "<% pp '==!===W===!==T==!==F==!=='%>"
-div.innerHTML += "<% pp Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.scrap_email(n.to_s)).id ) %>"
-div.innerHTML += "<% if Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.scrap_email(n.to_s)).id ).fold === false%>"
-div.innerHTML += "<h3 ><%= rank_score[track_place].to_s + ": " + n.to_s%></h3>"
-div.innerHTML += "<% else  %>"
-div.innerHTML += "<h3 ><%= rank_score[track_place].to_s + ": Folded" %></h3>"
-div.innerHTML += "<% end %>"
-div.innerHTML += "<% end %>"
-div.innerHTML += "<% track_place += 1%>"
-div.innerHTML += "<% end %>"
-
-
-
-
-
+$(function () {
+  var scores = superStringToArray(score);
+  var div = document.getElementById("a");
+  div.innerHTML = null;
+  var rankScore = ['First', 'Second', 'Third'];
+  var set = []
+  var n = ""
+  var trackCount = 0
+  for(var i = 0; i < score.length; i++){
+    set = score[i];
+    for( var z = 0; z < set.length; z++){
+      n = set[z];
+      // console.log(hands[i], i, z)
+      placeRankings(trackCount,hands,i,rankScore,n,div)
+      trackCount++
+    }
+  } 
+})
  var div = document.getElementById("1");
  div.className = "<%=o1%>"
  div.innerHTML = null
@@ -271,6 +290,21 @@ div.innerHTML += "<% end %>"
 
  }
 
+
+}
+
+function placeRankings(trackCount,hands,i,rankScore,n,div) {
+
+  $.get('/hands/' + hands[trackCount].toString() ).success (function(data) {
+      console.log(data, "bar")
+      if (data.fold == false){
+        div.innerHTML += "<h3>" + rankScore[i].toString() + ":" + n.toString() + "</h3>";
+      }
+      else{
+        div.innerHTML += "<h3>" + rankScore[i].toString() + ": Folded" + "</h3>";
+      }
+
+    })
 
 }
 

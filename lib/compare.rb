@@ -271,7 +271,14 @@ class Compare
         end
     end
 
-    
-
-
+    def self.flat_array(list)
+        final = []
+        list.each do |element|
+            element.each do |value|
+                final << Compare.scrap_email(value)
+            end
+        end
+        pp final
+        return final
+    end
 end
