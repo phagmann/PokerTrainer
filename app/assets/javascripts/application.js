@@ -32,65 +32,7 @@
 //         <span class="suit"><%=@card1.suit%></span>
 //     </div></li>
 
-function stringToArray(string){
-  var current = ""
-  var final = []
-  for (var i = 1; i < string.length; i++){
-      ii = string[i]
-      if(ii == "," || ii == "]" ){
-          final.push(current) 
-          current = ""
-      }
-      else{
-          current += ii
-      }
-      
-  }
-  return final
-}
 
-function withIn (string){
-    leftBrace = 1
-    rightBrace = 0
-    current = "["
-    for (var i = 1; i < string.length; i++){
-        ii = string[i]
-        if( ii === '['){
-            leftBrace++
-        }
-        else if( ii === ']'){
-            rightBrace++
-        }
-        current += ii
-        if (rightBrace === leftBrace){
-            return current
-        }
-    }
-    return "error"
-}
-function superStringToArray(string){
-  var current = ""
-  var final = []
-  for (var i = 1; i < string.length; i++){
-      ii = string[i]
-      if( ii === '['){
-            innerList = withIn(string.substring(i))
-            final.push([stringToArray(innerList)])
-            current = ""
-            i += innerList.length 
-        } 
-      else if (ii == "," || ii == "]" ){
-          final.push(current) 
-          current = ""
-      }
-      else{
-          current += ii
-      }
-
-
-  }
-  return final
-}
 
 
 

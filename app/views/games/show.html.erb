@@ -231,7 +231,7 @@ $(function () {
     set = score[i];
     for( var z = 0; z < set.length; z++){
       n = set[z];
-      // console.log(hands[i], i, z)
+      console.log(hands[i], i, z)
       placeRankings(trackCount,hands,i,rankScore,n,div)
       trackCount++
     }
@@ -306,6 +306,66 @@ function placeRankings(trackCount,hands,i,rankScore,n,div) {
 
     })
 
+}
+
+function stringToArray(string){
+  var current = ""
+  var final = []
+  for (var i = 1; i < string.length; i++){
+      ii = string[i]
+      if(ii == "," || ii == "]" ){
+          final.push(current) 
+          current = ""
+      }
+      else{
+          current += ii
+      }
+      
+  }
+  return final
+}
+
+function withIn (string){
+    leftBrace = 1
+    rightBrace = 0
+    current = "["
+    for (var i = 1; i < string.length; i++){
+        ii = string[i]
+        if( ii === '['){
+            leftBrace++
+        }
+        else if( ii === ']'){
+            rightBrace++
+        }
+        current += ii
+        if (rightBrace === leftBrace){
+            return current
+        }
+    }
+    return "error"
+}
+function superStringToArray(string){
+  var current = ""
+  var final = []
+  for (var i = 1; i < string.length; i++){
+      ii = string[i]
+      if( ii === '['){
+            innerList = withIn(string.substring(i))
+            final.push([stringToArray(innerList)])
+            current = ""
+            i += innerList.length 
+        } 
+      else if (ii == "," || ii == "]" ){
+          final.push(current) 
+          current = ""
+      }
+      else{
+          current += ii
+      }
+
+
+  }
+  return final
 }
 
 </script>
