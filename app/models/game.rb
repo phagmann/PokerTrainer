@@ -1,4 +1,9 @@
 class Game < ActiveRecord::Base
+    has_many :hands
+    belongs_to :player
+    has_one :pot 
+    has_many :rivers
+    
     # get this working in view
     def deal_cards(player)
         deck = Card.all.shuffle

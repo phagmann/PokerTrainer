@@ -17,16 +17,12 @@ var tracker = [10,11,12]
 
 <%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
 
-<% hh1 = [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[0])).id]  %>
-<% hh1 += [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[1])).id]  %>
-<% hh1 += [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[2])).id] %>
-<% pp hh1 %>
-<button onclick="flip(tracker[trackerIndex], <%= @score %>, <%= hh1 %> );trackerIndex++;potShow();" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
+
+<button onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
 
 <button onclick="potTest(<%= @game.id %>);" style = "position:relative; left:410px;top:50px; margin:0;" > Bet 1 chip</button>
 
 <% my_hand = Hand.where( game_id: @game.id, card_id: [@card1.id, @card2.id]) %>
-<% pp my_hand %>
 <button onclick="fold('<%= my_hand.pluck(:id) %>', true)" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
 
 
@@ -52,13 +48,11 @@ var tracker = [10,11,12]
 
 <%= link_to "Back", root_path %>
 
-<div class="col-xs-10" id="a" style="position:relative; right:200px;">
-
-<h3>h</h3>
-<h3>e</h3>
-<h3>y</h3>
+<div class="col-xs-10" id="a" style="height:120px;width:300px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
+<h2> Top 3 Winners: </h2>
 
 </div>
+
  
 
 
@@ -133,6 +127,11 @@ var tracker = [10,11,12]
 <br/>
 
 <br/>
+<div id="c" style="position:relative;height:200px;width:200px;right:160px;bottom:400px;">
+<%= current_player.email + ": " + current_player.chips_bank.to_s %>
+
+</div>
+
 </body>
 <script>
   myMove(1)
@@ -187,7 +186,7 @@ $.post('/hands/' + cards[i], {
     }
  )}
 
-function flip(current, score, hands){
+function flip(current, score, gameID){
 
 if (current === 10){
  var div = document.getElementById(current.toString());
@@ -222,23 +221,30 @@ if (current === 11){
   }
  if(current === 12){
 // fix this! innerHTML part is getting triggered after page loads.
-$(function () {
+  $(function () {
   var scores = superStringToArray(score);
   var div = document.getElementById("a");
-  div.innerHTML = null;
   var rankScore = ['First', 'Second', 'Third'];
   var set = []
   var n = ""
   var trackCount = 0
+  $.get('/games/' + gameID.toString() + ".json").success (function(hands) {
   for(var i = 0; i < score.length; i++){
     set = score[i];
     for( var z = 0; z < set.length; z++){
       n = set[z];
-      // console.log(hands[i], i, z)
-      placeRankings(trackCount,hands,i,rankScore,n,div)
+      var data = hands[trackCount]
+      if (data.fold == false){
+        div.innerHTML += "<p>" + rankScore[i].toString() + ":" + n.toString() + "</p>";
+      }
+      else{
+        div.innerHTML += "<p>" + rankScore[i].toString() + ": Folded" + "</p>";
+      }
+
+    }
       trackCount++
     }
-  } 
+  }) 
 })
  var div = document.getElementById("1");
  div.className = "<%=o1%>"
@@ -296,20 +302,6 @@ $(function () {
 
 }
 
-function placeRankings(trackCount,hands,i,rankScore,n,div) {
-
-  $.get('/hands/' + hands[trackCount].toString() ).success (function(data) {
-      console.log(data, "bar")
-      if (data.fold == false){
-        div.innerHTML += "<h3>" + rankScore[i].toString() + ":" + n.toString() + "</h3>";
-      }
-      else{
-        div.innerHTML += "<h3>" + rankScore[i].toString() + ": Folded" + "</h3>";
-      }
-
-    })
-
-}
 
 </script>
 
