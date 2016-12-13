@@ -43,9 +43,6 @@ class GamesController < ApplicationController
     load2 = Card.where(id: comp2.pluck("card_id")) + shared_cards
     load1 = Card.where(id: comp1.pluck("card_id")) + shared_cards
 
-    pot = Pot.find(@game.id)
-    pot.total_chips = 0
-    pot.save
 
     @score = Compare.win_order([Player.find_by(id: comp1.first.player_id), Player.find_by(id: comp2.first.player_id), Player.find_by(id: human1.first.player_id)] ,[load1,load2,load3])
     pp "================="

@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :games, only: [:index, :create, :show, :update, :destroy]
   resources :hands, only: [:show, :update]
   resources :pots, only: [:show, :update]
+  resources :users, only: [:show, :update]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

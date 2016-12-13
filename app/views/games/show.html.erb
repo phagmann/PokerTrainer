@@ -18,9 +18,9 @@ var tracker = [10,11,12]
 <%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
 
 
-<button onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
+<button onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
 
-<button onclick="potTest(<%= @game.id %>);" style = "position:relative; left:410px;top:50px; margin:0;" > Bet 1 chip</button>
+<button onclick="potTest(<%= @game.id %>, <%= current_player.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Bet 5 chips</button>
 
 <% my_hand = Hand.where( game_id: @game.id, card_id: [@card1.id, @card2.id]) %>
 <button onclick="fold('<%= my_hand.pluck(:id) %>', true)" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
@@ -139,21 +139,65 @@ var tracker = [10,11,12]
 
 <script>
 
-function potTest(gameID){
+function potTest(gameID,playerID){
   
+$.get( '/users/' + playerID.toString()).success (function(userDataq)  { 
+$.post('/users/' + playerID.toString(), {
+
+        _method: "PUT",
+        player: {
+          chips_bank: userDataq.chips_bank - 5
+        }
+      }).success (function(userData) {
+
+
+
+
 $.get('/pots/' + gameID.toString()).success (function(dataq) { 
 $.post('/pots/' + gameID.toString(), {
 
         _method: "PUT",
         pot: {
+          total_chips: 5 + dataq.total_chips
+        }
+      }).success (function(data) {
+          console.log(dataq)
+          var div = document.getElementById("b");
+          var civ = document.getElementById("c");
+          div.innerHTML = data.total_chips;
+          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
+      
+})}) })  }) }
 
-          total_chips: 1 + dataq.total_chips
+
+
+
+function winnings(gameID,playerID, scaler){
+  
+$.get( '/users/' + playerID.toString()).success (function(userDataq)  {
+$.get('/pots/' + gameID.toString()).success (function(dataq) { 
+
+$.post('/users/' + playerID.toString(), {
+
+        _method: "PUT",
+        player: {
+          chips_bank: userDataq.chips_bank + 2*scaler*dataq.total_chips
+        }
+      }).success (function(userData) {
+        console.log(dataq)
+$.post('/pots/' + gameID.toString(), {
+
+        _method: "PUT",
+        pot: {
+          total_chips: 0
         }
       }).success (function(data) {
           var div = document.getElementById("b");
+          var civ = document.getElementById("c");
           div.innerHTML = data.total_chips;
+          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
       
-})})}
+})}) })  }) }
 
 
 
@@ -186,7 +230,7 @@ $.post('/hands/' + cards[i], {
     }
  )}
 
-function flip(current, score, gameID){
+function flip(current, score, gameID, playerID){
 
 if (current === 10){
  var div = document.getElementById(current.toString());
@@ -236,6 +280,15 @@ if (current === 11){
       var data = hands[trackCount]
       if (data.fold == false){
         div.innerHTML += "<p>" + rankScore[i].toString() + ":" + n.toString() + "</p>";
+        if ( scrapEmail(n.toString()) === "phagmann1@gmail.com"){
+          if(rankScore[i].toString() === "First"){
+            winnings(gameID,playerID, 1.)
+          }
+          else {
+            winnings(gameID,playerID, 0)
+          }
+        }
+        
       }
       else{
         div.innerHTML += "<p>" + rankScore[i].toString() + ": Folded" + "</p>";
@@ -296,6 +349,11 @@ if (current === 11){
  sp2.className = "suit"
  sp2.innerHTML = "<%=@opp_c4.suit%>"
  div.appendChild(sp2);
+
+
+
+
+
 
  }
 

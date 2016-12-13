@@ -32,6 +32,21 @@
 //         <span class="suit"><%=@card1.suit%></span>
 //     </div></li>
 
+
+function scrapEmail(string){
+  var email = "";
+  for(var i = 0;i < string.length;i++){
+    char = string[i];
+    if (char !== ":"){
+      email += char;
+    }
+    else{
+      return email;
+    }
+  }
+
+}
+
 function stringToArray(string){
   var current = ""
   var final = []
