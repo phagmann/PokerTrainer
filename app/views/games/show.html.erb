@@ -20,7 +20,7 @@ var tracker = [10,11,12]
 
 <button onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
 
-<button onclick="potTest(<%= @game.id %>, <%= current_player.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Bet 5 chips</button>
+<button onclick="raise(<%= @game.id %>, <%= current_player.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Raise 5 chips</button>
 
 <% my_hand = Hand.where( game_id: @game.id, card_id: [@card1.id, @card2.id]) %>
 <button onclick="fold('<%= my_hand.pluck(:id) %>', true)" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
@@ -49,7 +49,7 @@ var tracker = [10,11,12]
 <%= link_to "Back", root_path %>
 
 <div class="col-xs-10" id="a" style="height:120px;width:300px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
-<h2> Top 3 Winners: </h2>
+<p> Top 3 Winners: </p>
 
 </div>
 
@@ -139,7 +139,18 @@ var tracker = [10,11,12]
 
 <script>
 
-function potTest(gameID,playerID){
+
+function circularMotion( ){
+
+
+}
+
+function call(){
+
+  
+}
+
+function raise(gameID,playerID){
   
 $.get( '/users/' + playerID.toString()).success (function(userDataq)  { 
 $.post('/users/' + playerID.toString(), {
