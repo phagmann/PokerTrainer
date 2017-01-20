@@ -7,11 +7,19 @@ Rails.application.routes.draw do
   # root 'welcome#index'
   root "games#index"
   devise_for :players
+
+  # get 'players/:id' => 'users#show'
+  # post 'players/:id' => 'users#update'
+
   resources :menus, only: [:index]
   resources :games, only: [:index, :create, :show, :update, :destroy]
   resources :hands, only: [:show, :update]
   resources :pots, only: [:show, :update]
+
   resources :users, only: [:show, :update]
+
+
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

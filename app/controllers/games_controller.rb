@@ -61,13 +61,13 @@ class GamesController < ApplicationController
     # pp Compare.straight_flush?(load)
     # pp "==========================================="
 
-    hh1 = [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[0]))]
-    hh1 += [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[1]))]
-    hh1 += [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[2]))]
+    @hh1 = [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[0]))]
+    @hh1 += [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[1]))]
+    @hh1 += [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[2]))]
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: hh1  }
+      format.json { render json: @hh1  }
     end
 
   end

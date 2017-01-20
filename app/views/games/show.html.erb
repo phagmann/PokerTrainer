@@ -4,6 +4,7 @@
 <!-- <%# button_to("Deal Cards", new_hand_card_path, method: :get, :style => "position:relative; left:410px;top:100px; margin:0;", :onclick => "myMove(1);") %> -->
 
 <!-- <div class="element"> -->
+<% @hh1 = @hh1.shuffle %>
 <body>
 
 
@@ -127,9 +128,11 @@ var tracker = [10,11,12]
 <br/>
 
 <br/>
-<div id="c" style="position:relative;height:200px;width:200px;right:160px;bottom:400px;">
-<%= current_player.email + ": " + current_player.chips_bank.to_s %>
-
+<div id ="c" style="position:relative;height:200px;width:200px;right:160px;bottom:400px;">
+<% @hh1.each do |hand| %>
+  <% player = Player.find(hand.player_id) %>
+  <p id="<%= 'c' + player.id.to_s %>"> <%= player.email + ": " + player.chips_bank.to_s %> </p>
+<% end %>
 </div>
 
 </body>
@@ -140,15 +143,39 @@ var tracker = [10,11,12]
 <script>
 
 
-function circularMotion( ){
 
+function call(gameID,playerID, matchAmount){
 
-}
-
-function call(){
 
   
-}
+$.get( '/users/' + playerID.toString()).success (function(userDataq)  { 
+$.post('/users/' + playerID.toString(), {
+
+        _method: "PUT",
+        player: {
+          chips_bank: userDataq.chips_bank - matchAmount
+        }
+      }).success (function(userData) {
+
+
+
+
+$.get('/pots/' + gameID.toString()).success (function(dataq) { 
+$.post('/pots/' + gameID.toString(), {
+
+        _method: "PUT",
+        pot: {
+          total_chips: matchAmount + dataq.total_chips
+        }
+      }).success (function(data) {
+          console.log(dataq)
+          var div = document.getElementById("b");
+          var civ = document.getElementById("c" + userData.id.toString());
+          div.innerHTML = data.total_chips;
+          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
+      
+})}) })  }) }
+
 
 function raise(gameID,playerID){
   
@@ -174,7 +201,7 @@ $.post('/pots/' + gameID.toString(), {
       }).success (function(data) {
           console.log(dataq)
           var div = document.getElementById("b");
-          var civ = document.getElementById("c");
+          var civ = document.getElementById("c" + userData.id.toString());
           div.innerHTML = data.total_chips;
           civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
       
@@ -204,9 +231,9 @@ $.post('/pots/' + gameID.toString(), {
         }
       }).success (function(data) {
           var div = document.getElementById("b");
-          var civ = document.getElementById("c");
+          var civ = document.getElementById("c" + userData.id.toString());
           div.innerHTML = data.total_chips;
-          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
+          // civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
       
 })}) })  }) }
 
@@ -240,6 +267,21 @@ $.post('/hands/' + cards[i], {
 
     }
  )}
+
+function circularMotion(gameID,playerID,cards){
+  // flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;
+
+
+  // get players
+  // get hands
+  // position order
+  // update certain databases
+  // AI pick want to do
+  // only do this function if comp players
+
+
+
+}
 
 function flip(current, score, gameID, playerID){
 
@@ -361,15 +403,11 @@ if (current === 11){
  sp2.innerHTML = "<%=@opp_c4.suit%>"
  div.appendChild(sp2);
 
-
-
-
-
-
  }
 
 
 }
+
 
 
 </script>
