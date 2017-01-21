@@ -296,5 +296,50 @@ function myMove(current) {
 
   }
 
+  function foldCheck(gameID) {
+  $(function() {
+$.get('/games/' + gameID.toString() + ".json").success (function(hands) {
+  $.get( '/user2s/' + gameID.toString()).success (function(players)  {
+  for(var i = 0;i < hands.length; i++){
+      var hand = hands[i];
+      for(var ii = 0;ii < players.length; ii++){
+        console.log(hand.player_id, players[ii].id)
+        if(hand.player_id == players[ii].id){
+            console.log("dicks out for hambre")
+            var player = players[ii];
+            break;
+        }
+      }
+      
+      
+    // for some reason this is doing the loop yet the $.get is only using the last data values
+    // loop 1,2,3... get uses 3,3,3....fml
+    
+      var div = document.getElementById("c" + player.id.toString());
+      div.innerHTML = player.email + ": " + player.chips_bank.toString(); 
+      var civ = document.getElementById("ac" + player.id.toString());
+      console.log(hand)
+      if(hand.fold == false){
+        civ.innerHTML = "Betting to: " + player.betting;
+      }
+      else{
+        civ.innerHTML = "Folded";
+      }
+
+
+ 
+  
+
+
+  }
+
+  })
+
+})
+
+})
+
+}
+
 
 

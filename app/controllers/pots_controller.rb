@@ -1,10 +1,10 @@
 class PotsController < ApplicationController
     def show
-        render json: Pot.find(params[:id])
+        render json: Pot.find_by(game_id: params[:id])
     end
 
     def update
-        pot = Pot.find(params[:id])
+        pot = Pot.find_by(game_id: params[:id])
         pot.update_attributes(pot_params)
         pot.save
         render json: pot
