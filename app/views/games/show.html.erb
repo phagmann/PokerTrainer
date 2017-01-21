@@ -24,7 +24,7 @@ var tracker = [10,11,12]
 <button onclick="raise(<%= @game.id %>, <%= current_player.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Raise 5 chips</button>
 
 <% my_hand = Hand.where( game_id: @game.id, card_id: [@card1.id, @card2.id]) %>
-<button onclick="fold('<%= my_hand.pluck(:id) %>', true)" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
+<button onclick="fold('<%= my_hand.pluck(:id) %>', true, <%= @game.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
 
 
 
@@ -50,7 +50,7 @@ var tracker = [10,11,12]
 <%= link_to "Back", root_path %>
 
 <div class="col-xs-10" id="a" style="height:120px;width:300px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;">
-<p> Top 3 Winners: </p>
+
 
 </div>
 
@@ -66,7 +66,7 @@ var tracker = [10,11,12]
 
 <div class="form_circle" style="position:relative;bottom:110px;right:150px;">
 <div class="fish blue" style="width: 70px;height: 70px;">
-  <div id="b"> <%= Pot.find(@game.id).total_chips %></div>
+  <div id="b"> <%= @game.pot.total_chips %></div>
 </div> 
 </div>
 
@@ -105,6 +105,10 @@ var tracker = [10,11,12]
  </div></li>
  <li><div id="10" class="card back">*</div></li>
   <li><div id="11" class="card back">*</div></li>
+  <script>
+    
+  </script>
+
    <li><div class="card back">*</div></li>
     <li><div class="card back">*</div></li>
      <li><div class="card back">*</div></li>
@@ -128,13 +132,17 @@ var tracker = [10,11,12]
 <br/>
 
 <br/>
-<div id ="c" style="position:relative;height:200px;width:200px;right:160px;bottom:400px;">
+<div id ="c" style="position:relative;height:300px;width:230px;right:160px;bottom:400px;">
 <% @hh1.each do |hand| %>
   <% player = Player.find(hand.player_id) %>
   <p id="<%= 'c' + player.id.to_s %>"> <%= player.email + ": " + player.chips_bank.to_s %> </p>
+  <% if player.hands.where(game_id: @game.id).first.fold == false %>
+    <p id="<%= 'ac' + player.id.to_s %>"> Betting to: <%= player.betting %> </p>
+  <% else %>
+    <p id="<%= 'ac' + player.id.to_s %>"> Folded </p>
+  <% end %>
 <% end %>
 </div>
-
 </body>
 <script>
   myMove(1)
@@ -233,7 +241,7 @@ $.post('/pots/' + gameID.toString(), {
           var div = document.getElementById("b");
           var civ = document.getElementById("c" + userData.id.toString());
           div.innerHTML = data.total_chips;
-          // civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
+          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
       
 })}) })  }) }
 
@@ -242,7 +250,7 @@ $.post('/pots/' + gameID.toString(), {
 
 
 
-function fold(cards,bool){
+function fold(cards,bool, gameID){
 cards = stringToArray(cards)
 // something about
 $(function() {
@@ -266,7 +274,10 @@ $.post('/hands/' + cards[i], {
   )}
 
     }
- )}
+
+ )
+foldCheck(gameID);
+}
 
 function circularMotion(gameID,playerID,cards){
   // flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;
@@ -317,7 +328,7 @@ if (current === 11){
 
   }
  if(current === 12){
-// fix this! innerHTML part is getting triggered after page loads.
+// fix this! if everyone ties and user folds, then it shows that everyone folded!
   $(function () {
   var scores = superStringToArray(score);
   var div = document.getElementById("a");
@@ -333,7 +344,8 @@ if (current === 11){
       var data = hands[trackCount]
       if (data.fold == false){
         div.innerHTML += "<p>" + rankScore[i].toString() + ":" + n.toString() + "</p>";
-        if ( scrapEmail(n.toString()) === "phagmann1@gmail.com"){
+        if ( scrapEmail(n.toString()) === "phagmann1@gmail.com"){ 
+          // make this work for not just my email
           if(rankScore[i].toString() === "First"){
             winnings(gameID,playerID, 1.)
           }

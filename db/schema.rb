@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20170120015844) do
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.integer  "chips_bank",             default: 500
+    t.integer  "betting",                default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "user_name"

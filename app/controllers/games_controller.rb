@@ -6,15 +6,16 @@ class GamesController < ApplicationController
   end
 
   def create
-    g = Game.create
-    g.deal_cards(current_player)
+    g = Game.create(player1_id: 1, player2_id: 2, player3_id: current_player.id )
+    g.deal_cards
     Pot.create(game_id: g.id)
     redirect_to (game_path(g.id))
   end
 
   def show
     @game = Game.find(params[:id])
-
+    @game.pot.total_chips = 0
+    @game.pot.save
     human1 =  Hand.where( game_id: @game.id, player_id: current_player.id ).order(card_id: :asc)
     @card1 = Card.find_by( id: human1[0].card_id )
     @card2 = Card.find_by( id: human1[1].card_id )
@@ -28,7 +29,7 @@ class GamesController < ApplicationController
     @opp_c3 = Card.find_by( id: comp2[0].card_id )
     @opp_c4 = Card.find_by( id: comp2[1].card_id )
 
-    river = River.where(game_id: @game.id)
+    river = @game.rivers
     @river1 = Card.find_by(id: river[0].card_id)
     @river2 = Card.find_by(id: river[1].card_id)
     @river3 = Card.find_by(id: river[2].card_id)
@@ -74,18 +75,19 @@ class GamesController < ApplicationController
 
   def update
     @game = Game.find(params[:id])
-    Hand.destroy_all( game_id: @game.id, player_id: current_player.id )
-    Hand.destroy_all( game_id: @game.id, player_id: 1 )
-    Hand.destroy_all( game_id: @game.id, player_id: 2 )
+    Hand.destroy_all( game_id: @game.id)
     River.destroy_all(game_id: @game.id)
 
-    @game.deal_cards(current_player)
+    @game.deal_cards
     redirect_to(game_path)
   end
 
   def destroy
     @game = Game.find(params[:id])
-    @game.destroy
+    @game.destroy 
+    @game.pot.destroy
+    Hand.destroy_all( game_id: @game.id)
+    River.destroy_all(game_id: @game.id)
     redirect_to(games_path)
   end
 

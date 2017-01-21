@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :pots, only: [:show, :update]
 
   resources :users, only: [:show, :update]
+  resources :user2s, only: [:show]
 
 
 
