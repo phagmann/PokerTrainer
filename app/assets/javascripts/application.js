@@ -298,7 +298,7 @@ function myMove(current) {
 
   function foldCheck(gameID) {
   $(function() {
-$.get('/games/' + gameID.toString() + ".json").success (function(hands) {
+$.get('/hand2s/' + gameID.toString()).success (function(hands) {
   $.get( '/user2s/' + gameID.toString()).success (function(players)  {
   for(var i = 0;i < hands.length; i++){
       var hand = hands[i];
@@ -321,9 +321,35 @@ $.get('/games/' + gameID.toString() + ".json").success (function(hands) {
       console.log(hand)
       if(hand.fold == false){
         civ.innerHTML = "Betting to: " + player.betting;
+
       }
       else{
         civ.innerHTML = "Folded";
+        //make sure this is user
+        var biv = document.getElementById("raise");
+        biv.disabled = true;
+// 
+
+  // autosycranous behavior messes up folding on screen
+$.post('/hands/' + hand.id, {
+        _method: "PUT",
+        hand: {
+          fold: hand.fold
+        }
+      }).success (function(data) {
+  div = document.getElementById(data.positions_id)
+  div.className = "card back"
+  div.style= "background:black;top:" + div.style.top.toString() + ";left:" + div.style.left.toString()
+  div.innerHTML = "*"
+}
+  )
+
+
+
+
+
+// 
+
       }
 
 
