@@ -13,7 +13,7 @@ class UsersController < ApplicationController
     private
 
     def player_params
-      params.require(:player).permit(:chips_bank)
+      params.require(:player).permit(:chips_bank, :betting)
     end
 
 end

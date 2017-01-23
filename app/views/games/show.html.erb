@@ -192,28 +192,20 @@ $.post('/users/' + playerID.toString(), {
 
         _method: "PUT",
         player: {
-          chips_bank: userDataq.chips_bank - 5
+          chips_bank: userDataq.chips_bank - 5,
+          betting: userDataq.betting + 5
+          
+          // betting isnt updating but chips_bank is. Fix!
         }
       }).success (function(userData) {
-
-
-
-
-$.get('/pots/' + gameID.toString()).success (function(dataq) { 
-$.post('/pots/' + gameID.toString(), {
-
-        _method: "PUT",
-        pot: {
-          total_chips: 5 + dataq.total_chips
-        }
-      }).success (function(data) {
-          console.log(dataq)
-          var div = document.getElementById("b");
           var civ = document.getElementById("c" + userData.id.toString());
-          div.innerHTML = data.total_chips;
-          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
-      
-})}) })  }) }
+          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString();
+
+          var div = document.getElementById("ac" + userData.id.toString());
+          div.innerHTML = "Betting to: " + userData.betting;
+
+
+ })  }) }
 
 
 
@@ -242,7 +234,7 @@ $.post('/pots/' + gameID.toString(), {
           var civ = document.getElementById("c" + userData.id.toString());
           div.innerHTML = data.total_chips;
           civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
-      
+          
 })}) })  }) }
 
 
@@ -252,9 +244,9 @@ $.post('/pots/' + gameID.toString(), {
 
 function fold(cards,bool, gameID){
 cards = stringToArray(cards)
-// something about
 $(function() {
 for ( var i= 0; i < cards.length; i++){
+  // autosycranous behavior messes up folding on screen
 $.post('/hands/' + cards[i], {
         _method: "PUT",
         hand: {
@@ -266,16 +258,12 @@ $.post('/hands/' + cards[i], {
   div.style= "background:black;top:" + div.style.top.toString() + ";left:" + div.style.left.toString()
   div.innerHTML = "*"
 }
-// for(var trace_cards = 0; trace_cards < cards.length; trace_cards++){
-//   var current = cards[trace_cards]
-//   current.fold = true
-//   console.log(current)
-// }
   )}
 
     }
 
  )
+// maybe quick pause?
 foldCheck(gameID);
 }
 
@@ -295,6 +283,30 @@ function circularMotion(gameID,playerID,cards){
 }
 
 function flip(current, score, gameID, playerID){
+$.get( '/users/' + playerID.toString()).success (function(userDataq)  {
+  $.get('/pots/' + gameID.toString()).success (function(dataq) { 
+$.post('/pots/' + gameID.toString(), {
+
+        _method: "PUT",
+        pot: {
+          total_chips: dataq.total_chips + userDataq.betting
+        }
+      }).success (function(data) {
+        $.post('/users/' + playerID.toString(), {
+
+        _method: "PUT",
+        player: {
+          betting: 0
+        }
+      }).success (function(userData) {
+
+          var div = document.getElementById("b");
+          div.innerHTML = data.total_chips;
+          var civ = document.getElementById("ac" + userData.id.toString());
+          civ.innerHTML = "Betting to: " + userData.betting;
+     
+    })  
+})})})
 
 if (current === 10){
  var div = document.getElementById(current.toString());
