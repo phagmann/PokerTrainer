@@ -303,9 +303,7 @@ $.get('/hand2s/' + gameID.toString()).success (function(hands) {
   for(var i = 0;i < hands.length; i++){
       var hand = hands[i];
       for(var ii = 0;ii < players.length; ii++){
-        console.log(hand.player_id, players[ii].id)
         if(hand.player_id == players[ii].id){
-            console.log("dicks out for hambre")
             var player = players[ii];
             break;
         }
@@ -318,7 +316,6 @@ $.get('/hand2s/' + gameID.toString()).success (function(hands) {
       var div = document.getElementById("c" + player.id.toString());
       div.innerHTML = player.email + ": " + player.chips_bank.toString(); 
       var civ = document.getElementById("ac" + player.id.toString());
-      console.log(hand)
       if(hand.fold == false){
         civ.innerHTML = "Betting to: " + player.betting;
 

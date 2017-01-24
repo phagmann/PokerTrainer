@@ -14,13 +14,12 @@ var trackerIndex = 0
 var tracker = [10,11,12]
 // TODO: changes to database, cards, in JS
 // TODO: use post request
+foldCheck(<%= @game.id %> )
 </script>
 
 <%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
 
-<script>
-  foldCheck(<%= @game.id %> )
-</script>
+
 
 <button id="flip" onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
 
@@ -150,6 +149,7 @@ var tracker = [10,11,12]
 </body>
 <script>
   myMove(1)
+  
 </script>
 
 <script>
@@ -215,6 +215,7 @@ $.post('/users/' + playerID.toString(), {
 
 
 function winnings(gameID,playerID, scaler){
+  console.log("'breasts",scaler)
   
 $.get( '/users/' + playerID.toString()).success (function(userDataq)  {
 $.get('/pots/' + gameID.toString()).success (function(dataq) { 
@@ -287,7 +288,31 @@ function circularMotion(gameID,playerID,cards){
 
 }
 
-function flip(current, score, gameID, playerID){
+ function flip(current, score, gameID, playerID){
+ $.get( '/users/' + playerID.toString()).success (function(userDataq)  {   
+   $.get('/pots/' + gameID.toString()).success (function(dataq) {    
+ $.post('/pots/' + gameID.toString(), {    
+        
+         _method: "PUT",
+         pot: {    
+           total_chips: dataq.total_chips + userDataq.betting    
+         }   
+       }).success (function(data) {    
+         $.post('/users/' + playerID.toString(), {   
+     
+         _method: "PUT",   
+         player: {   
+          betting: 0    
+        }   
+       }).success (function(userData) {    
+     
+           var div = document.getElementById("b");   
+           div.innerHTML = data.total_chips;   
+           var civ = document.getElementById("ac" + userData.id.toString());   
+           civ.innerHTML = "Betting to: " + userData.betting;    
+        
+     })      
+ })})})
 
 foldCheck(gameID);
 
