@@ -14,8 +14,6 @@ class GamesController < ApplicationController
 
   def show
     @game = Game.find(params[:id])
-    @game.pot.total_chips = 0
-    @game.pot.save
     human1 =  Hand.where( game_id: @game.id, player_id: current_player.id ).order(card_id: :asc)
     @card1 = Card.find_by( id: human1[0].card_id )
     @card2 = Card.find_by( id: human1[1].card_id )
@@ -67,7 +65,8 @@ class GamesController < ApplicationController
     @hh1 += [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[2]))]
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { @game.pot.total_chips = 0
+         @game.pot.save }
       format.json { render json: @hh1  }
     end
 
