@@ -1,6 +1,6 @@
 require './lib/compare.rb'
 class GamesController < ApplicationController
-  # load = Card.where(id: human1.pluck("card_id")) + Card.where(id: river.pluck("card_id"))
+  # GENIUS IDEA, use NCG varibles, each for probability of each hand to assign weights
   def index
     @games = Game.all
   end

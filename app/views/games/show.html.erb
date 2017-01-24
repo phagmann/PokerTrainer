@@ -1,9 +1,8 @@
 <h1/> Texas Hold'em </h1>
 <!-- ♠ ♥ ♦ ♣ -->
-<!-- TODO: make a new.html/erb have the acutal game played on that. maybe a show.html.erb? -->
-<!-- <%# button_to("Deal Cards", new_hand_card_path, method: :get, :style => "position:relative; left:410px;top:100px; margin:0;", :onclick => "myMove(1);") %> -->
-
-<!-- <div class="element"> -->
+<!-- TODO: figure out comp betting%> -->
+    <!-- have comp's call,raise, fold  in javascript? (check)-->
+    <!-- refix folding update in real time, ayscrynous problems? -->
 <% @hh1 = @hh1.shuffle %>
 <body>
 
@@ -20,13 +19,12 @@ foldCheck(<%= @game.id %> )
 <%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
 
 
-
-<button id="flip" onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
+<button id="flip" onclick="circularMotion(<%= @game.id %>);flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
 
 <button id="raise" onclick="raise(<%= @game.id %>, <%= current_player.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Raise 5 chips</button>
 
-<% my_hand = Hand.where( game_id: @game.id, card_id: [@card1.id, @card2.id]) %>
-<button id="fold" onclick="fold('<%= my_hand.pluck(:id) %>', true, <%= @game.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
+
+<button id="fold" onclick="fold(<%= current_player.id %>, true, <%= @game.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
 
 
 
@@ -215,7 +213,6 @@ $.post('/users/' + playerID.toString(), {
 
 
 function winnings(gameID,playerID, scaler){
-  console.log("'breasts",scaler)
   
 $.get( '/users/' + playerID.toString()).success (function(userDataq)  {
 $.get('/pots/' + gameID.toString()).success (function(dataq) { 
@@ -247,43 +244,73 @@ $.post('/pots/' + gameID.toString(), {
 
 
 
-function fold(cards,bool, gameID){
-cards = stringToArray(cards)
-$(function() {
-for ( var i= 0; i < cards.length; i++){
-  // autosycranous behavior messes up folding on screen
-$.post('/hands/' + cards[i], {
-        _method: "PUT",
-        hand: {
-          fold: bool
-        }
-      }).success (function(data) {
-  div = document.getElementById(data.positions_id)
-  div.className = "card back"
-  div.style= "background:black;top:" + div.style.top.toString() + ";left:" + div.style.left.toString()
-  div.innerHTML = "*"
-}
-  )}
+function fold(playerID,bool, gameID){
 
+// cards is array that holds
+$(function() {
+$.get('/hand2s/' + gameID.toString()).success (function(hands) {
+for ( var i= 0; i < hands.length; i++){
+hand = hands[i]
+if(playerID == hand.player_id && hand.fold == false){
+  $.post('/hands/' + hand.id.toString(), {
+          _method: "PUT",
+          hand: {
+            fold: bool
+          }
+        }).success (function(data) {
+    div = document.getElementById(data.positions_id)
+    div.className = "card back"
+    div.style= "background:black;top:" + div.style.top.toString() + ";left:" + div.style.left.toString()
+    div.innerHTML = "*"
+}
+
+  )
+      // update other loop logic here
+    }}
+
+
+})
     }
 
  )
 // maybe quick pause?
 foldCheck(gameID);
+
 }
 
 
-function circularMotion(gameID,playerID,cards){
+function circularMotion(gameID){
   // flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;
 
 
-  // get players
-  // get hands
-  // position order
-  // update certain databases
-  // AI pick want to do
-  // only do this function if comp players
+ $(function() {
 
+    $.get( '/comps/' + gameID.toString()).success (function(actions)  {
+      keys = Object.keys(actions)
+      console.log(keys);
+      for(var i = 0;i < keys.length; i++){
+
+        playerID = keys[i]
+        action = actions[playerID]
+
+        if (action == "Check" ){
+          console.log("C");
+          raise(gameID,playerID)
+        } 
+        else if(action == "Fold"){
+          console.log("F");
+          fold(playerID,true, gameID);
+        }
+
+
+
+
+
+
+      }
+  })
+
+})
 
 
 }

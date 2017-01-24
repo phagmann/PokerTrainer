@@ -48,6 +48,9 @@ function scrapEmail(string){
 }
 
 function stringToArray(string){
+  if (typeof myVar !== 'string'){
+    return string;
+  }
   var current = ""
   var final = []
   for (var i = 1; i < string.length; i++){

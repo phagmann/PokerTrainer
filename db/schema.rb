@@ -36,11 +36,8 @@ ActiveRecord::Schema.define(version: 20170120015844) do
     t.integer  "player2_id"
     t.integer  "player3_id"
     t.integer  "player4_id"
-    t.integer  "river1_id"
-    t.integer  "river2_id"
-    t.integer  "river3_id"
-    t.integer  "river4_id"
-    t.integer  "river5_id"
+    t.integer  "player_turn"
+    t.integer  "current_high_bet"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
