@@ -8,6 +8,7 @@ class Game < ActiveRecord::Base
     def deal_cards
         deck = Card.all.shuffle
         # byebug
+        
         Hand.create(game_id: self.id, player_id: self.player3_id, card_id: deck.pop.id, positions_id: "3")
         Hand.create(game_id: self.id, player_id: self.player3_id, card_id: deck.pop.id, positions_id: "6")
         

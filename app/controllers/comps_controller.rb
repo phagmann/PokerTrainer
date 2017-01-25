@@ -10,8 +10,8 @@ class CompsController < ApplicationController
         # very simple AI strat
         ai_player_list.each do |player|
             num = 1 + rand(100)
-            final[player.id] = "Fold" if num <= 33
-            final[player.id] = "Check" if num > 33 && num <= 99
+            final[player.id] = "Fold" if num <= 1
+            final[player.id] = "Check" if num > 1 && num <= 99
         end
         render json: final
     end

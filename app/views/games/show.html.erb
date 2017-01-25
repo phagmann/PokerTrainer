@@ -3,6 +3,7 @@
 <!-- TODO: figure out comp betting%> -->
     <!-- have comp's call,raise, fold  in javascript? (check)-->
     <!-- refix folding update in real time, ayscrynous problems? -->
+    <!-- betting working wierd! -->
 <% @hh1 = @hh1.shuffle %>
 <body>
 
@@ -19,7 +20,7 @@ foldCheck(<%= @game.id %> )
 <%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
 
 
-<button id="flip" onclick="circularMotion(<%= @game.id %>);flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
+<button id="flip" onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
 
 <button id="raise" onclick="raise(<%= @game.id %>, <%= current_player.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Raise 5 chips</button>
 
@@ -178,7 +179,7 @@ $.post('/pots/' + gameID.toString(), {
           total_chips: matchAmount + dataq.total_chips
         }
       }).success (function(data) {
-          console.log(dataq)
+          
           var div = document.getElementById("b");
           var civ = document.getElementById("c" + userData.id.toString());
           div.innerHTML = data.total_chips;
@@ -188,7 +189,7 @@ $.post('/pots/' + gameID.toString(), {
 
 
 function raise(gameID,playerID){
-  
+
 $.get( '/users/' + playerID.toString()).success (function(userDataq)  { 
 $.post('/users/' + playerID.toString(), {
 
@@ -200,14 +201,14 @@ $.post('/users/' + playerID.toString(), {
           // betting isnt updating but chips_bank is. Fix!
         }
       }).success (function(userData) {
+          console.log(playerID,"poop")
           var civ = document.getElementById("c" + userData.id.toString());
           civ.innerHTML = userData.email + ": " + userData.chips_bank.toString();
-
           var div = document.getElementById("ac" + userData.id.toString());
           div.innerHTML = "Betting to: " + userData.betting;
 
 
- })  }) }
+ })  })  }
 
 
 
@@ -224,7 +225,7 @@ $.post('/users/' + playerID.toString(), {
           chips_bank: userDataq.chips_bank + 2*scaler*dataq.total_chips
         }
       }).success (function(userData) {
-        console.log(dataq)
+        
 $.post('/pots/' + gameID.toString(), {
 
         _method: "PUT",
@@ -279,30 +280,30 @@ foldCheck(gameID);
 }
 
 
-function circularMotion(gameID){
-  // flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;
+function circularMotion(gameID,current){
+// may need to make a side raise,fold :(
 
+if(current != 12){
 
- $(function() {
 
     $.get( '/comps/' + gameID.toString()).success (function(actions)  {
-      keys = Object.keys(actions)
-      console.log(keys);
+      keys = Object.keys(actions);
+     
       for(var i = 0;i < keys.length; i++){
 
-        playerID = keys[i]
-        action = actions[playerID]
+        playerID = keys[i];
+        action = actions[playerID];
 
         if (action == "Check" ){
           console.log("C");
-          raise(gameID,playerID)
+          // being called after the fact?
+          raise(gameID,playerID);
         } 
         else if(action == "Fold"){
           console.log("F");
-          fold(playerID,true, gameID);
+          fold(playerID,true, gameID),200;
         }
-
-
+        // sleep(1000);
 
 
 
@@ -310,38 +311,35 @@ function circularMotion(gameID){
       }
   })
 
-})
 
 
 }
+}
 
- function flip(current, score, gameID, playerID){
- $.get( '/users/' + playerID.toString()).success (function(userDataq)  {   
-   $.get('/pots/' + gameID.toString()).success (function(dataq) {    
- $.post('/pots/' + gameID.toString(), {    
-        
-         _method: "PUT",
-         pot: {    
-           total_chips: dataq.total_chips + userDataq.betting    
-         }   
-       }).success (function(data) {    
-         $.post('/users/' + playerID.toString(), {   
-     
-         _method: "PUT",   
-         player: {   
-          betting: 0    
-        }   
-       }).success (function(userData) {    
-     
-           var div = document.getElementById("b");   
-           div.innerHTML = data.total_chips;   
-           var civ = document.getElementById("ac" + userData.id.toString());   
-           civ.innerHTML = "Betting to: " + userData.betting;    
-        
-     })      
- })})})
+ function flip(current, score, gameID){
+      circularMotion(gameID,current);
+      // may need to make a side raise,fold :(
+      $.post('/pots/' + gameID.toString(), {    
+          
+           _method: "PUT",
+           pot: {    
+                updated_at: new Date().toLocaleString() // real updates inside controller
+           }   
+  }).success (function(pot) { 
+      $.get( '/user2s/' + gameID.toString()).success (function(players)  {
+      var div = document.getElementById("b");   
+      div.innerHTML = pot.total_chips;  
+      console.log("jarjar") 
+      for (var i = 0;i < players.length; i++){
+         var player = players[i];
+         var playerID = player.id;  
+         var civ = document.getElementById("ac" + playerID.toString());   
+         civ.innerHTML = "Betting to: " + player.betting;    
+          
+}})})
 
 foldCheck(gameID);
+
 
 if (current === 10){
  var div = document.getElementById(current.toString());
@@ -391,15 +389,16 @@ if (current === 11){
       var data = hands[trackCount]
       if (data.fold == false){
         div.innerHTML += "<p>" + rankScore[i].toString() + ":" + n.toString() + "</p>";
-        if ( scrapEmail(n.toString()) === "phagmann1@gmail.com"){ 
-          // make this work for not just my email
-          if(rankScore[i].toString() === "First"){
-            winnings(gameID,playerID, 1.)
+        
+ 
+          if(rankScore[i].toString() == "First"){
+
+            winnings(gameID,data.player_id, 1.) 
+
           }
           else {
-            winnings(gameID,playerID, 0)
+            winnings(gameID,data.player_id, 0)
           }
-        }
         
       }
       else{

@@ -31,7 +31,10 @@
 //         <span class="rank"><%=@card1.rank%></span>
 //         <span class="suit"><%=@card1.suit%></span>
 //     </div></li>
-
+function sleep(delay) {
+        var start = new Date().getTime();
+        while (new Date().getTime() < start + delay);
+      }
 
 function scrapEmail(string){
   var email = "";

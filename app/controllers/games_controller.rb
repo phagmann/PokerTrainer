@@ -13,7 +13,22 @@ class GamesController < ApplicationController
   end
 
   def show
+
     @game = Game.find(params[:id])
+
+    player_list = []
+    player_list << Player.find(@game.player1_id) if @game.player1_id != nil
+    player_list << Player.find(@game.player2_id) if @game.player2_id != nil
+    player_list << Player.find(@game.player3_id) if @game.player3_id != nil
+    player_list << Player.find(@game.player4_id) if @game.player4_id != nil
+
+    player_list.each do |player|
+      player.betting = 0
+      player.save
+    end
+
+
+
     human1 =  Hand.where( game_id: @game.id, player_id: current_player.id ).order(card_id: :asc)
     @card1 = Card.find_by( id: human1[0].card_id )
     @card2 = Card.find_by( id: human1[1].card_id )
