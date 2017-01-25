@@ -303,7 +303,7 @@ function myMove(current) {
   }
 
   function foldCheck(gameID) {
-  $(function() {
+
 $.get('/hand2s/' + gameID.toString()).success (function(hands) {
   $.get( '/user2s/' + gameID.toString()).success (function(players)  {
   for(var i = 0;i < hands.length; i++){
@@ -315,9 +315,6 @@ $.get('/hand2s/' + gameID.toString()).success (function(hands) {
         }
       }
       
-      
-    // for some reason this is doing the loop yet the $.get is only using the last data values
-    // loop 1,2,3... get uses 3,3,3....fml
     
       var div = document.getElementById("c" + player.id.toString());
       div.innerHTML = player.email + ": " + player.chips_bank.toString(); 
@@ -366,7 +363,7 @@ $.post('/hands/' + hand.id, {
 
 })
 
-})
+
 
 }
 

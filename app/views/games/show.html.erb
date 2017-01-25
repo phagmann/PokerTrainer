@@ -1,9 +1,7 @@
 <h1/> Texas Hold'em </h1>
 <!-- ♠ ♥ ♦ ♣ -->
 <!-- TODO: figure out comp betting%> -->
-    <!-- have comp's call,raise, fold  in javascript? (check)-->
-    <!-- refix folding update in real time, ayscrynous problems? -->
-    <!-- betting working wierd! -->
+    <!-- betting seems to randomly work, why? -->
 <% @hh1 = @hh1.shuffle %>
 <body>
 
@@ -287,33 +285,12 @@ if(current != 12){
 
 
     $.get( '/comps/' + gameID.toString()).success (function(actions)  {
-      keys = Object.keys(actions);
-     
-      for(var i = 0;i < keys.length; i++){
-
-        playerID = keys[i];
-        action = actions[playerID];
-
-        if (action == "Check" ){
-          console.log("C");
-          // being called after the fact?
-          raise(gameID,playerID);
-        } 
-        else if(action == "Fold"){
-          console.log("F");
-          fold(playerID,true, gameID),200;
-        }
-        // sleep(1000);
-
-
-
-
-      }
+      console.log(actions);
   })
 
 
 
-}
+  }
 }
 
  function flip(current, score, gameID){

@@ -13,7 +13,26 @@ class CompsController < ApplicationController
             final[player.id] = "Fold" if num <= 1
             final[player.id] = "Check" if num > 1 && num <= 99
         end
-        render json: final
+        
+        keys = final.keys()
+     
+        ai_player_list.each do |player|
+            action = final[player.id]
+            player_hands = player.hands.where(game_id: g.id)
+
+            if action == "Check" 
+                player.betting += 5
+                player.save
+            elsif action == "Fold"
+                player_hands.each do |hand|
+                    hand.fold = true
+                    hand.save
+                end
+            end
+
+        end
+        render json: ai_player_list
+
     end
 
 
