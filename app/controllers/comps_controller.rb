@@ -13,7 +13,7 @@ class CompsController < ApplicationController
             final[player.id] = "Fold" if num <= 1
             final[player.id] = "Check" if num > 1 && num <= 99
         end
-        
+
         keys = final.keys()
      
         ai_player_list.each do |player|
@@ -22,6 +22,7 @@ class CompsController < ApplicationController
 
             if action == "Check" 
                 player.betting += 5
+                player.chips_bank -= 5
                 player.save
             elsif action == "Fold"
                 player_hands.each do |hand|
