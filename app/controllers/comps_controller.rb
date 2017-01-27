@@ -1,5 +1,6 @@
 class CompsController < ApplicationController
     def show
+        # alot of this can be in model!!
         final = Hash.new
         ai_player_list = []
         g = Game.find(params[:id])
@@ -10,8 +11,8 @@ class CompsController < ApplicationController
         # very simple AI strat
         ai_player_list.each do |player|
             num = 1 + rand(100)
-            final[player.id] = "Fold" if num <= 1
-            final[player.id] = "Check" if num > 1 && num <= 99
+            final[player.id] = "Fold" if num <= 50
+            final[player.id] = "Check" if num > 50 && num <= 99
         end
 
         keys = final.keys()

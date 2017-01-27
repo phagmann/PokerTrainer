@@ -15,6 +15,32 @@ var tracker = [10,11,12]
 foldCheck(<%= @game.id %> )
 </script>
 
+<div data-role="main" class="ui-content">
+      <label for="points">Coins:</label>
+      <input id= "slider_amount" type="range" name="points" id="points" value="50" min="0" max="100">
+      <input type="submit" data-inline="true" value="Bet">
+      <input id="bet_amount" type="text" value="50">
+</div>
+
+<script> 
+
+$("#slider_amount").change( function(){
+  $("#bet_amount").val($("#slider_amount").val());
+});
+$("#bet_amount").change( function(){
+  $("#slider_amount").val($("#bet_amount").val());
+});
+
+$("#bet_amount").keypress( function(event) {
+  if (event.keyCode == 13){
+    $("#slider_amount").val($("#bet_amount").val());
+    event.preventDefault();
+  }
+});
+
+
+</script>
+
 <%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
 
 
