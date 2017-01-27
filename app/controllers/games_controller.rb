@@ -16,16 +16,7 @@ class GamesController < ApplicationController
 
     @game = Game.find(params[:id])
 
-    player_list = []
-    player_list << Player.find(@game.player1_id) if @game.player1_id != nil
-    player_list << Player.find(@game.player2_id) if @game.player2_id != nil
-    player_list << Player.find(@game.player3_id) if @game.player3_id != nil
-    player_list << Player.find(@game.player4_id) if @game.player4_id != nil
 
-    player_list.each do |player|
-      player.betting = 0
-      player.save
-    end
 
 
 
@@ -63,6 +54,14 @@ class GamesController < ApplicationController
     pp @score
 
 
+# <% track_place = 0 %>
+# <% rank_score = ["First", "Second", "Third"] %>
+# <% @score.each do |set| %>
+#   <% set.each do |n| %>
+#       <h3 ><%=  "#{rank_score[track_place]}: #{n}" %></h3>
+#   <% end %>
+#    <% track_place += 1%>
+# <% end %>
 
     # pp Compare.high_card(load)
     # pp "==========================================="
@@ -80,8 +79,20 @@ class GamesController < ApplicationController
     @hh1 += [Hand.find_by(game_id: @game.id, player_id: Player.find_by(email: Compare.flat_array(@score)[2]))]
 
     respond_to do |format|
-      format.html { @game.pot.total_chips = 0
-         @game.pot.save }
+      format.html { 
+        player_list = []
+        player_list << Player.find(@game.player1_id) if @game.player1_id != nil
+        player_list << Player.find(@game.player2_id) if @game.player2_id != nil
+        player_list << Player.find(@game.player3_id) if @game.player3_id != nil
+        player_list << Player.find(@game.player4_id) if @game.player4_id != nil
+
+        player_list.each do |player|
+          player.betting = 0
+           player.save
+        end
+        @game.pot.total_chips = 0
+        @game.pot.save }
+        
       format.json { render json: @hh1  }
     end
 

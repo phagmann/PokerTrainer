@@ -346,7 +346,9 @@ if (current === 11){
   var n = ""
   var trackCount = 0
   // go to games controller and figure this out with winnings!
+  sleep(200)
   $.get('/games/' + gameID.toString() + ".json").success (function(hands) {
+  console.log(score)
   for(var i = 0; i < score.length; i++){
     set = score[i];
     for( var z = 0; z < set.length; z++){
@@ -355,10 +357,10 @@ if (current === 11){
       if (data.fold == false){
         div.innerHTML += "<p>" + rankScore[i].toString() + ":" + n.toString() + "</p>";
         
- 
+          console.log(i, data)
           if(rankScore[i].toString() == "First"){
 
-            winnings(gameID,data.player_id, 1.) 
+            winnings(gameID,data.player_id, 1.) //make sure pot divided if ties (1/ num of winners)
 
           }
           else {
@@ -369,9 +371,9 @@ if (current === 11){
       else{
         div.innerHTML += "<p>" + rankScore[i].toString() + ": Folded" + "</p>";
       }
-
-    }
       trackCount++
+    }
+      
     }
   }) 
 })
