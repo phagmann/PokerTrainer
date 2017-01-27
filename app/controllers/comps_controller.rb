@@ -11,8 +11,8 @@ class CompsController < ApplicationController
         # very simple AI strat
         ai_player_list.each do |player|
             num = 1 + rand(100)
-            final[player.id] = "Fold" if num <= 50
-            final[player.id] = "Check" if num > 50 && num <= 99
+            final[player.id] = "Fold" if num <= 1
+            final[player.id] = "Check" if num > 1 && num <= 99
         end
 
         keys = final.keys()
@@ -22,8 +22,8 @@ class CompsController < ApplicationController
             player_hands = player.hands.where(game_id: g.id)
 
             if action == "Check" 
-                player.betting += 5
-                player.chips_bank -= 5
+                player.betting += g.current_high_bet
+                player.chips_bank -= g.current_high_bet
                 player.save
             elsif action == "Fold"
                 player_hands.each do |hand|
@@ -33,6 +33,8 @@ class CompsController < ApplicationController
             end
 
         end
+        g.current_high_bet = 0
+        g.save
         render json: ai_player_list
 
     end

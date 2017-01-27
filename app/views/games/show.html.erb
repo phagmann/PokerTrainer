@@ -17,9 +17,9 @@ foldCheck(<%= @game.id %> )
 
 <div data-role="main" class="ui-content">
       <label for="points">Coins:</label>
-      <input id= "slider_amount" type="range" name="points" id="points" value="50" min="0" max="100">
-      <input type="submit" data-inline="true" value="Bet">
-      <input id="bet_amount" type="text" value="50">
+      <input id= "slider_amount" type="range" name="points" id="points" value="10" min="0" max="100">
+      <!-- <input type="submit" data-inline="true" value="Bet"> -->
+      <input id="bet_amount" type="text" value="10">
 </div>
 
 <script> 
@@ -46,7 +46,7 @@ $("#bet_amount").keypress( function(event) {
 
 <button id="flip" onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
 
-<button id="raise" onclick="raise(<%= @game.id %>, <%= current_player.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Raise 5 chips</button>
+<button id="raise" onclick="raise(<%= @game.id %>, <%= current_player.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Raise </button>
 
 
 <button id="fold" onclick="fold(<%= current_player.id %>, true, <%= @game.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
@@ -177,7 +177,7 @@ $("#bet_amount").keypress( function(event) {
 
 <script>
 
-
+$("#slider_amount").val();
 
 function call(gameID,playerID, matchAmount){
 
@@ -219,18 +219,33 @@ $.post('/users/' + playerID.toString(), {
 
         _method: "PUT",
         player: {
-          chips_bank: userDataq.chips_bank - 5,
-          betting: userDataq.betting + 5
+          chips_bank: userDataq.chips_bank - parseInt($("#slider_amount").val()),
+          betting: userDataq.betting + parseInt($("#slider_amount").val())
+          
           
           // betting isnt updating but chips_bank is. Fix!
         }
       }).success (function(userData) {
-          console.log(playerID,"poop")
+         $.get( '/targets/' + gameID.toString()).success (function(g)  { 
+        $.post('/targets/' + gameID.toString(), {
+
+        _method: "PUT",
+        game: {
+          current_high_bet: g.current_high_bet + parseInt($("#slider_amount").val())
+        }
+      }).success (function(game) {
+
+
+
+
+          console.log(game,"poop")
           var civ = document.getElementById("c" + userData.id.toString());
           civ.innerHTML = userData.email + ": " + userData.chips_bank.toString();
           var div = document.getElementById("ac" + userData.id.toString());
           div.innerHTML = "Betting to: " + userData.betting;
 
+
+})})
 
  })  })  }
 

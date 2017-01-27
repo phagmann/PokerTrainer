@@ -80,6 +80,7 @@ class GamesController < ApplicationController
 
     respond_to do |format|
       format.html { 
+        @game.current_high_bet = 0
         player_list = []
         player_list << Player.find(@game.player1_id) if @game.player1_id != nil
         player_list << Player.find(@game.player2_id) if @game.player2_id != nil

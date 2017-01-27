@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   # get 'players/:id' => 'users#show'
   # post 'players/:id' => 'users#update'
-
+  resources :targets, only: [:show, :update]
   resources :menus, only: [:index]
   resources :games, only: [:index, :create, :show, :update, :destroy]
   resources :hands, only: [:show, :update]
@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :update]
   resources :user2s, only: [:show]
   resources :comps, only: [:show]
+
 
 
 
