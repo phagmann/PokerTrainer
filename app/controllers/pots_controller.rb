@@ -12,7 +12,6 @@ class PotsController < ApplicationController
         player_list << Player.find(g.player2_id) if g.player2_id != nil
         player_list << Player.find(g.player3_id) if g.player3_id != nil
         player_list << Player.find(g.player4_id) if g.player4_id != nil
-        p match?(player_list, g.current_high_bet), "$$$$$$$", player_list
         if match?(player_list, g.current_high_bet) == true
             player_list.each do |player|
                 pot.total_chips += player.betting

@@ -1,7 +1,8 @@
 <h1/> Texas Hold'em </h1>
 <!-- ♠ ♥ ♦ ♣ -->
 <!-- TODO: figure out comp betting%> -->
-    <!-- not using same database comps/pots!-->
+    <!-- not using same database comps/pots! (fixed, testing more)-->
+    <!-- pot didnt distribute winnings -->
 <% @hh1 = @hh1.shuffle %>
 <body>
 
@@ -225,7 +226,7 @@ function winnings(gameID,playerID, scaler){
   
 $.get( '/users/' + playerID.toString()).success (function(userDataq)  {
 $.get('/pots/' + gameID.toString()).success (function(dataq) { 
-
+console.log("winnings", scaler)
 $.post('/users/' + playerID.toString(), {
 
         _method: "PUT",
@@ -241,6 +242,7 @@ $.post('/pots/' + gameID.toString(), {
           total_chips: 0
         }
       }).success (function(data) {
+          console.log(data)
           var div = document.getElementById("b");
           var civ = document.getElementById("c" + userData.id.toString());
           div.innerHTML = data.total_chips;
@@ -312,13 +314,7 @@ foldCheck(gameID);
 
       $.get( '/comps/' + gameID.toString()).success (function(players)  {
       // not using same database comps/pots!
-      $.post('/pots/' + gameID.toString(), {    
-          
-           _method: "PUT",
-           pot: {    
-                updated_at: new Date().toLocaleString() // real updates inside controller
-           }   
-  }).success (function(pot) { 
+      $.get('/pots/' + gameID.toString()).success (function(pot) { 
 
       console.log(" da pot", pot)
       var div = document.getElementById("b");   

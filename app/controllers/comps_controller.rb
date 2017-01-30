@@ -16,8 +16,8 @@ class CompsController < ApplicationController
         ai_player_list.each do |player|
             num = 1 + rand(100)
             final[player.id] = "Fold" if num <= 1
-            final[player.id] = "Check" if num > 1 && num <= 80
-            final[player.id] = "Raise" if num > 80
+            final[player.id] = "Check" if num > 1 && num <= 90
+            final[player.id] = "Raise" if num > 90
         end
 
         keys = final.keys()
@@ -52,11 +52,25 @@ class CompsController < ApplicationController
             end
         
         end
-
+        pot = Pot.find_by(game_id: params[:id])
         ai_player_list << Player.find(g.player3_id) if g.player3_id != nil
         ai_player_list << Player.find(g.player4_id) if g.player4_id != nil
-        g.current_high_bet = 0 if match?(ai_player_list, g.current_high_bet)
+        if match?(ai_player_list, g.current_high_bet) == true
+            ai_player_list.each do |player|
+                pot.total_chips += player.betting
+                player.betting = 0
+                player.save
+            end
+            g.current_high_bet = 0 
+        end
         g.save
+        pot.save
+
+
+
+
+
+
 
         p "*********",ai_player_list
         render json: ai_player_list
@@ -70,6 +84,10 @@ class CompsController < ApplicationController
             return false if player.betting != high_bet
         end
         return true
+    end
+
+    def pot_params
+      params.require(:pot).permit(:total_chips)
     end
 
     def hand_params
