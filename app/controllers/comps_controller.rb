@@ -4,10 +4,13 @@ class CompsController < ApplicationController
         # alot of this can be in model!!
         final = Hash.new
         ai_player_list = []
-        current_player.moved_once = true
-        current_player.save
         g = Game.find(params[:id])
+        
+        current_player.moved_once = true
+        g.current_high_bet = current_player.betting if current_player.betting > g.current_high_bet
         g.save
+        current_player.save
+        
         # just AI players
         ai_player_list << Player.find(g.player1_id) if g.player1_id != nil
         ai_player_list << Player.find(g.player2_id) if g.player2_id != nil
@@ -16,8 +19,8 @@ class CompsController < ApplicationController
         ai_player_list.each do |player|
             num = 1 + rand(100)
             final[player.id] = "Fold" if num <= 1
-            final[player.id] = "Check" if num > 1 && num <= 90
-            final[player.id] = "Raise" if num > 90
+            final[player.id] = "Check" if num > 1 && num <= 70
+            final[player.id] = "Raise" if num > 70
         end
 
         keys = final.keys()
@@ -25,7 +28,6 @@ class CompsController < ApplicationController
         ai_player_list.each do |player|
             action = final[player.id]
             player_hands = player.hands.where(game_id: g.id)
-
             if action == "Check" 
                 prev_bet = player.betting
                 player.betting = g.current_high_bet
@@ -55,6 +57,7 @@ class CompsController < ApplicationController
         pot = Pot.find_by(game_id: params[:id])
         ai_player_list << Player.find(g.player3_id) if g.player3_id != nil
         ai_player_list << Player.find(g.player4_id) if g.player4_id != nil
+        p "*********",ai_player_list, match?(ai_player_list, g.current_high_bet)
         if match?(ai_player_list, g.current_high_bet) == true
             ai_player_list.each do |player|
                 pot.total_chips += player.betting
@@ -72,7 +75,7 @@ class CompsController < ApplicationController
 
 
 
-        p "*********",ai_player_list
+        
         render json: ai_player_list
 
     end
