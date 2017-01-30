@@ -18,7 +18,7 @@ foldCheck(<%= @game.id %> )
 
 <div data-role="main" class="ui-content">
       <label for="points">Chips:</label>
-      <input id= "slider_amount" type="range" name="points" id="points" value="10" min="0" max="100">
+      <input id= "slider_amount" type="range" name="points" id="points" value="10" min="0" max="500">
       <!-- <input type="submit" data-inline="true" value="Bet"> -->
       <input id="bet_amount" type="text" value="10">
 </div>
@@ -222,38 +222,6 @@ $.post('/users/' + playerID.toString(), {
 
 
 
-function winnings(gameID,playerID, scaler){
-  
-$.get( '/users/' + playerID.toString()).success (function(userDataq)  {
-$.get('/pots/' + gameID.toString()).success (function(dataq) { 
-console.log("winnings", scaler)
-$.post('/users/' + playerID.toString(), {
-
-        _method: "PUT",
-        player: {
-          chips_bank: userDataq.chips_bank + scaler*dataq.total_chips
-        }
-      }).success (function(userData) {
-        
-$.post('/pots/' + gameID.toString(), {
-
-        _method: "PUT",
-        pot: {
-          total_chips: 0
-        }
-      }).success (function(data) {
-          console.log(data)
-          var div = document.getElementById("b");
-          var civ = document.getElementById("c" + userData.id.toString());
-          div.innerHTML = data.total_chips;
-          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
-          
-})}) })  }) }
-
-
-
-
-
 
 function fold(playerID,bool, gameID){
 
@@ -292,13 +260,54 @@ foldCheck(gameID);
 
 
 
+
+function winnings(gameID,playerID, scaler){
+  
+$.get( '/users/' + playerID.toString()).success (function(userDataq)  {
+$.get('/pots/' + gameID.toString()).success (function(dataq) { 
+console.log("winnings", scaler)
+$.post('/users/' + playerID.toString(), {
+
+        _method: "PUT",
+        player: {
+          chips_bank: userDataq.chips_bank + scaler*dataq.total_chips
+        }
+      }).success (function(userData) {
+        
+$.post('/pots/' + gameID.toString(), {
+
+        _method: "PUT",
+        pot: {
+          total_chips: 0
+        }
+      }).success (function(data) {
+          console.log(data)
+          var div = document.getElementById("b");
+          var civ = document.getElementById("c" + userData.id.toString());
+          div.innerHTML = data.total_chips;
+          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
+          
+
+
+})}) })  }) }
+
+
+
+
+
+
+
+
+
+
+
  function flip(current, score, gameID, current_playerID){
 
        $.get( '/game1s/' + gameID.toString()).success (function(matchAmount)  { 
 
 
         $.get( '/users/' + current_playerID.toString()).success (function(userDataq)  { 
-         var prev_bet = userDataq.betting
+         var prev_bet = userDataq.betting;
 
         $.post('/users/' + current_playerID.toString(), {
 
@@ -313,7 +322,7 @@ foldCheck(gameID);
           
 
       $.get( '/comps/' + gameID.toString()).success (function(players)  {
-      // not using same database comps/pots!
+
       $.get('/pots/' + gameID.toString()).success (function(pot) { 
 
       console.log(" da pot", pot)
