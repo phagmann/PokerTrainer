@@ -53,18 +53,20 @@ ActiveRecord::Schema.define(version: 20170120015844) do
   end
 
   create_table "players", force: true do |t|
-    t.string   "email",                  default: "",  null: false
-    t.string   "encrypted_password",     default: "",  null: false
+    t.string   "email",                  default: "",    null: false
+    t.string   "encrypted_password",     default: "",    null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,   null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.integer  "chips_bank",             default: 500
+    t.integer  "chips_bank",             default: 0
+    t.integer  "all_chips",              default: 2000
     t.integer  "betting",                default: 0
+    t.boolean  "moved_once",             default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "user_name"

@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :update]
   resources :user2s, only: [:show]
   resources :comps, only: [:show]
-
+  resources :game1s, only: [:show]
 
 
 

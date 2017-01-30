@@ -3,13 +3,31 @@ class GamesController < ApplicationController
   # GENIUS IDEA, use NCG varibles, each for probability of each hand to assign weights
   def index
     @games = Game.all
+    if current_player
+     current_player.all_chips += current_player.chips_bank
+     current_player.chips_bank = 0
+     current_player.save
+    end
   end
 
   def create
-    g = Game.create(player1_id: 1, player2_id: 2, player3_id: current_player.id )
-    g.deal_cards
-    Pot.create(game_id: g.id)
-    redirect_to (game_path(g.id))
+    @game = Game.create(player1_id: 1, player2_id: 2, player3_id: current_player.id )
+    player_list = []
+    player_list << Player.find(@game.player1_id) if @game.player1_id != nil
+    player_list << Player.find(@game.player2_id) if @game.player2_id != nil
+    player_list << Player.find(@game.player3_id) if @game.player3_id != nil
+    player_list << Player.find(@game.player4_id) if @game.player4_id != nil
+
+    player_list.each do |player|
+      player.betting = 0
+      player.chips_bank = 500 # if player has zero chips then should redirct to page to buy more chips!
+      player.all_chips -= player.chips_bank
+      player.save
+    end
+
+    @game.deal_cards
+    Pot.create(game_id: @game.id)
+    redirect_to (game_path(@game.id))
   end
 
   def show
@@ -81,6 +99,9 @@ class GamesController < ApplicationController
     respond_to do |format|
       format.html { 
         @game.current_high_bet = 0
+        @game.pot.total_chips = 0
+        @game.pot.save 
+        @game.save 
         player_list = []
         player_list << Player.find(@game.player1_id) if @game.player1_id != nil
         player_list << Player.find(@game.player2_id) if @game.player2_id != nil
@@ -89,11 +110,12 @@ class GamesController < ApplicationController
 
         player_list.each do |player|
           player.betting = 0
-           player.save
+          player.save
         end
-        @game.pot.total_chips = 0
-        @game.pot.save }
-        
+
+
+
+      }
       format.json { render json: @hh1  }
     end
 
@@ -119,7 +141,17 @@ class GamesController < ApplicationController
 
  private 
 
+  def hand_params
+    params.require(:hand).permit(:fold)
+  end
 
+  def player_params
+    params.require(:player).permit(:chips_bank, :betting, :all_chips)
+  end
+
+  def game_params
+    params.require(:game).permit(:current_high_bet)
+  end
 
   def card_value_conversion_hash 
     hashy = {}

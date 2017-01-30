@@ -3,7 +3,7 @@
 <h1> Learn how to Play Poker like a Pro </h1>
 <% if player_signed_in? %>
         <li><%= link_to 'Sign out', destroy_player_session_path, method: :delete %></li>
-  <h2> You have <%= current_player.chips_bank %> Chips in your Bank! </h2>
+  <h2> You have <%= current_player.all_chips %> Chips in your Bank! </h2>
 
 <%= link_to "Learn More About Me", "https://phagmann.github.io/", :target => "_blank" %>
 <br/>

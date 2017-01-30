@@ -18,8 +18,10 @@ class DeviseCreatePlayers < ActiveRecord::Migration
       t.datetime :last_sign_in_at
       t.string   :current_sign_in_ip
       t.string   :last_sign_in_ip
-      t.integer :chips_bank, default: 500
+      t.integer :chips_bank, default: 0
+      t.integer :all_chips, default: 2000
       t.integer :betting, default: 0
+      t.boolean :moved_once,  default: false
       ## Confirmable
       # t.string   :confirmation_token
       # t.datetime :confirmed_at

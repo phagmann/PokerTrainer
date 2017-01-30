@@ -1,7 +1,7 @@
 <h1/> Texas Hold'em </h1>
 <!-- ♠ ♥ ♦ ♣ -->
 <!-- TODO: figure out comp betting%> -->
-    <!-- betting seems to randomly work, why? -->
+    <!-- not using same database comps/pots!-->
 <% @hh1 = @hh1.shuffle %>
 <body>
 
@@ -16,7 +16,7 @@ foldCheck(<%= @game.id %> )
 </script>
 
 <div data-role="main" class="ui-content">
-      <label for="points">Coins:</label>
+      <label for="points">Chips:</label>
       <input id= "slider_amount" type="range" name="points" id="points" value="10" min="0" max="100">
       <!-- <input type="submit" data-inline="true" value="Bet"> -->
       <input id="bet_amount" type="text" value="10">
@@ -43,8 +43,8 @@ $("#bet_amount").keypress( function(event) {
 
 <%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
 
-
-<button id="flip" onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Flip Me </button>
+<!-- call and flip being done at same time is probally causing issues -->
+<button id="flip" onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Check </button>
 
 <button id="raise" onclick="raise(<%= @game.id %>, <%= current_player.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Raise </button>
 
@@ -179,37 +179,7 @@ $("#bet_amount").keypress( function(event) {
 
 $("#slider_amount").val();
 
-function call(gameID,playerID, matchAmount){
 
-
-  
-$.get( '/users/' + playerID.toString()).success (function(userDataq)  { 
-$.post('/users/' + playerID.toString(), {
-
-        _method: "PUT",
-        player: {
-          chips_bank: userDataq.chips_bank - matchAmount
-        }
-      }).success (function(userData) {
-
-
-
-
-$.get('/pots/' + gameID.toString()).success (function(dataq) { 
-$.post('/pots/' + gameID.toString(), {
-
-        _method: "PUT",
-        pot: {
-          total_chips: matchAmount + dataq.total_chips
-        }
-      }).success (function(data) {
-          
-          var div = document.getElementById("b");
-          var civ = document.getElementById("c" + userData.id.toString());
-          div.innerHTML = data.total_chips;
-          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString()
-      
-})}) })  }) }
 
 
 function raise(gameID,playerID){
@@ -238,7 +208,6 @@ $.post('/users/' + playerID.toString(), {
 
 
 
-          console.log(game,"poop")
           var civ = document.getElementById("c" + userData.id.toString());
           civ.innerHTML = userData.email + ": " + userData.chips_bank.toString();
           var div = document.getElementById("ac" + userData.id.toString());
@@ -321,9 +290,28 @@ foldCheck(gameID);
 
 
 
- function flip(current, score, gameID){
-      $.get( '/comps/' + gameID.toString()).success (function(actions)  {
-      // may need to make a side raise,fold :(
+ function flip(current, score, gameID, current_playerID){
+
+       $.get( '/game1s/' + gameID.toString()).success (function(matchAmount)  { 
+
+
+        $.get( '/users/' + current_playerID.toString()).success (function(userDataq)  { 
+         var prev_bet = userDataq.betting
+
+        $.post('/users/' + current_playerID.toString(), {
+
+        _method: "PUT",
+        player: {
+          chips_bank: userDataq.chips_bank - (matchAmount.current_high_bet - prev_bet),
+          betting: matchAmount.current_high_bet
+        }
+      }).success (function(userData) {
+
+
+          
+
+      $.get( '/comps/' + gameID.toString()).success (function(players)  {
+      // not using same database comps/pots!
       $.post('/pots/' + gameID.toString(), {    
           
            _method: "PUT",
@@ -331,22 +319,46 @@ foldCheck(gameID);
                 updated_at: new Date().toLocaleString() // real updates inside controller
            }   
   }).success (function(pot) { 
-      $.get( '/user2s/' + gameID.toString()).success (function(players)  {
+
+      console.log(" da pot", pot)
       var div = document.getElementById("b");   
-      div.innerHTML = pot.total_chips;  
+      div.innerHTML = pot.total_chips; 
+      var revisit = false;
+      console.log(players);
       for (var i = 0;i < players.length; i++){
+
          var player = players[i];
-         var playerID = player.id;  
+         var playerID = player.id;
+         if( i == 0){
+          var bet = player.betting; 
+         }  
+         else{
+          if(player.betting != bet){
+            revisit = true;
+          }
+         }
          var civ = document.getElementById("ac" + playerID.toString());   
          civ.innerHTML = "Betting to: " + player.betting; 
-      foldCheck(gameID);   
-          
-}})}) })
+      
+      
 
+}
 
+  console.log(revisit)
+  if (revisit == true){
+    trackerIndex -= 1;
+    current = 0;
+    }
+  cardAction(current, score, gameID, current_playerID);
 
+}) }) })
+})  }) 
 
-if (current === 10){
+}
+
+function cardAction(current, score, gameID, current_playerID){
+
+  if (current === 10){
  var div = document.getElementById(current.toString());
  div.className = "<%=f1%>"
  div.innerHTML = null
@@ -389,7 +401,6 @@ if (current === 11){
   // go to games controller and figure this out with winnings!
   sleep(200)
   $.get('/games/' + gameID.toString() + ".json").success (function(hands) {
-  console.log(score)
   for(var i = 0; i < score.length; i++){
     set = score[i];
     for( var z = 0; z < set.length; z++){
@@ -398,7 +409,6 @@ if (current === 11){
       if (data.fold == false){
         div.innerHTML += "<p>" + rankScore[i].toString() + ":" + n.toString() + "</p>";
         
-          console.log(i, data)
           if(rankScore[i].toString() == "First"){
 
             winnings(gameID,data.player_id, 1.) //make sure pot divided if ties (1/ num of winners)
@@ -471,10 +481,7 @@ if (current === 11){
 
  }
 
-
 }
-
-
 
 </script>
 
