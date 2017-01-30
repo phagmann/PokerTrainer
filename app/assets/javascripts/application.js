@@ -315,15 +315,12 @@ $.get('/hand2s/' + gameID.toString()).success (function(hands) {
         }
       }
       
-    
+      console.log("money")
+      console.log(players);
       var div = document.getElementById("c" + player.id.toString());
       div.innerHTML = player.email + ": " + player.chips_bank.toString(); 
       var civ = document.getElementById("ac" + player.id.toString());
-      if(hand.fold == false){
-        civ.innerHTML = "Betting to: " + player.betting;
-
-      }
-      else{
+      if(hand.fold == true){
         civ.innerHTML = "Folded";
         //make sure this is user
         var biv = document.getElementById("raise");

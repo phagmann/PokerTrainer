@@ -45,9 +45,9 @@ $("#bet_amount").keypress( function(event) {
 <%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
 
 <!-- call and flip being done at same time is probally causing issues -->
-<button id="flip" onclick="flip(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Check </button>
+<button id="flip" onclick="call(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Check / Call</button>
 
-<button id="raise" onclick="raise(<%= @game.id %>, <%= current_player.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Raise </button>
+<button id="raise" onclick="raise(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:50px; margin:0;" > Raise </button>
 
 
 <button id="fold" onclick="fold(<%= current_player.id %>, true, <%= @game.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
@@ -178,46 +178,66 @@ $("#bet_amount").keypress( function(event) {
 
 <script>
 
-$("#slider_amount").val();
+function raise(current, score, gameID, current_playerID){
 
+       $.get( '/game1s/' + gameID.toString()).success (function(matchAmount)  { 
+          console.log()
+          if (parseInt($("#slider_amount").val()) < matchAmount.current_high_bet){
+            return
+          }
+        $.get( '/users/' + current_playerID.toString()).success (function(userDataq)  { 
+         var prev_bet = userDataq.betting;
 
-
-
-function raise(gameID,playerID){
-
-$.get( '/users/' + playerID.toString()).success (function(userDataq)  { 
-$.post('/users/' + playerID.toString(), {
+        $.post('/users/' + current_playerID.toString(), {
 
         _method: "PUT",
         player: {
-          chips_bank: userDataq.chips_bank - parseInt($("#slider_amount").val()),
-          betting: userDataq.betting + parseInt($("#slider_amount").val())
-          
-          
-          // betting isnt updating but chips_bank is. Fix!
+          chips_bank: userDataq.chips_bank - (parseInt($("#slider_amount").val()) - prev_bet),
+          betting: parseInt($("#slider_amount").val())
         }
       }).success (function(userData) {
-         $.get( '/targets/' + gameID.toString()).success (function(g)  { 
-        $.post('/targets/' + gameID.toString(), {
-
-        _method: "PUT",
-        game: {
-          current_high_bet: g.current_high_bet + parseInt($("#slider_amount").val())
-        }
-      }).success (function(game) {
 
 
+          
 
+      $.get( '/comps/' + gameID.toString()).success (function(players)  {
 
-          var civ = document.getElementById("c" + userData.id.toString());
-          civ.innerHTML = userData.email + ": " + userData.chips_bank.toString();
-          var div = document.getElementById("ac" + userData.id.toString());
-          div.innerHTML = "Betting to: " + userData.betting;
+      $.get('/pots/' + gameID.toString()).success (function(pot) { 
+      var div = document.getElementById("b");   
+      div.innerHTML = pot.total_chips; 
+      var revisit = false;
+      console.log(players);
+      for (var i = 0;i < players.length; i++){
 
+         var player = players[i];
+         var playerID = player.id;
+         if( i == 0){
+          var bet = player.betting; 
+         }  
+         else{
+          if(player.betting != bet){
+            revisit = true;
+          }
+         }
+         var civ = document.getElementById("ac" + playerID.toString());   
+         civ.innerHTML = "Betting to: " + player.betting; 
+      
+      
 
-})})
+}
 
- })  })  }
+  console.log(revisit)
+  if (revisit == true){
+    trackerIndex -= 1;
+    current = 0;
+    }
+
+  cardAction(current, score, gameID, current_playerID);
+  foldCheck(gameID);
+}) }) })
+})  }) 
+
+}
 
 
 
@@ -301,7 +321,7 @@ $.post('/pots/' + gameID.toString(), {
 
 
 
- function flip(current, score, gameID, current_playerID){
+ function call(current, score, gameID, current_playerID){
 
        $.get( '/game1s/' + gameID.toString()).success (function(matchAmount)  { 
 
@@ -325,7 +345,6 @@ $.post('/pots/' + gameID.toString(), {
 
       $.get('/pots/' + gameID.toString()).success (function(pot) { 
 
-      console.log(" da pot", pot)
       var div = document.getElementById("b");   
       div.innerHTML = pot.total_chips; 
       var revisit = false;
@@ -354,8 +373,9 @@ $.post('/pots/' + gameID.toString(), {
     trackerIndex -= 1;
     current = 0;
     }
+  
   cardAction(current, score, gameID, current_playerID);
-
+  foldCheck(gameID);
 }) }) })
 })  }) 
 
