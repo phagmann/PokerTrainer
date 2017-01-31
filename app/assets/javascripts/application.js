@@ -323,8 +323,6 @@ $.get('/hand2s/' + gameID.toString()).success (function(hands) {
       if(hand.fold == true){
         civ.innerHTML = "Folded";
         //make sure this is user
-        var biv = document.getElementById("raise");
-        biv.disabled = true;
 // 
 
   // autosycranous behavior messes up folding on screen

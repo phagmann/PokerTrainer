@@ -12,15 +12,15 @@ class CompsController < ApplicationController
         current_player.save
         
         # just AI players
-        ai_player_list << Player.find(g.player1_id) if g.player1_id != nil
-        ai_player_list << Player.find(g.player2_id) if g.player2_id != nil
+        ai_player_list << Player.find(g.player1_id) if g.player1_id != nil && Hand.find_by(game_id: g.id, player_id: g.player1_id).fold == false
+        ai_player_list << Player.find(g.player2_id) if g.player2_id != nil && Hand.find_by(game_id: g.id, player_id: g.player2_id).fold == false
         
         # very simple AI strat
         ai_player_list.each do |player|
             num = 1 + rand(100)
-            final[player.id] = "Fold" if num <= 1
-            final[player.id] = "Check" if num > 1 && num <= 70
-            final[player.id] = "Raise" if num > 70
+            final[player.id] = "Fold" if num <= 50
+            final[player.id] = "Check" if num > 50 && num <= 99
+            final[player.id] = "Raise" if num > 99
         end
 
         keys = final.keys()
@@ -84,7 +84,7 @@ class CompsController < ApplicationController
 
     def match?(players, high_bet)
         players.each do |player|
-            return false if player.betting != high_bet
+            return false if player.betting != high_bet && Hand.find_by(player_id: player.id).fold == false
         end
         return true
     end

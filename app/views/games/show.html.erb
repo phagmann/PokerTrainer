@@ -290,7 +290,7 @@ $.post('/users/' + playerID.toString(), {
 
         _method: "PUT",
         player: {
-          chips_bank: userDataq.chips_bank + scaler*dataq.total_chips
+          chips_bank: userDataq.chips_bank + Math.round(scaler*dataq.total_chips)
         }
       }).success (function(userData) {
         
@@ -426,6 +426,7 @@ if (current === 11){
   // go to games controller and figure this out with winnings!
   sleep(200)
   $.get('/games/' + gameID.toString() + ".json").success (function(hands) {
+  var claim = false
   for(var i = 0; i < score.length; i++){
     set = score[i];
     for( var z = 0; z < set.length; z++){
@@ -434,10 +435,10 @@ if (current === 11){
       if (data.fold == false){
         div.innerHTML += "<p>" + rankScore[i].toString() + ":" + n.toString() + "</p>";
         
-          if(rankScore[i].toString() == "First"){
+          if(claim == false ){
 
-            winnings(gameID,data.player_id, 1.) //make sure pot divided if ties (1/ num of winners)
-
+            winnings(gameID,data.player_id, 1.0 / set.length) //make sure pot divided if ties (1/ num of winners)
+            claim = true
           }
           else {
             winnings(gameID,data.player_id, 0)
@@ -453,6 +454,7 @@ if (current === 11){
     }
   }) 
 })
+// fix so cards dont show near end up round
  var div = document.getElementById("1");
  div.className = "<%=o1%>"
  div.innerHTML = null
