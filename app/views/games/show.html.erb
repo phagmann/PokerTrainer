@@ -35,6 +35,7 @@ $("#bet_amount").change( function(){
 $("#bet_amount").keypress( function(event) {
   if (event.keyCode == 13){
     $("#slider_amount").val($("#bet_amount").val());
+
     event.preventDefault();
   }
 });
@@ -47,7 +48,7 @@ $("#bet_amount").keypress( function(event) {
 <!-- call and flip being done at same time is probally causing issues -->
 <button id="flip" onclick="call(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Check / Call</button>
 
-<button id="raise" onclick="raise(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:50px; margin:0;" > Raise </button>
+<button id="raise" onclick="raise(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:50px; margin:0;" > Raise Amount In Slide Bar</button>
 
 
 <button id="fold" onclick="fold(<%= current_player.id %>, true, <%= @game.id %> );" style = "position:relative; left:410px;top:50px; margin:0;" > Fold </button>
