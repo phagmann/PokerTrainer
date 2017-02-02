@@ -28,11 +28,11 @@
   
     <% @games.each do |game| %>
       <tr>
-
+      <% if game.player3_id == current_player.id %>
         <td><h3><%= game.id %></h3></td>
         <td><button><%= link_to 'Play', game_path(game) %></button></td>
         <td><button><%= link_to 'Delete', game_path(game), method: :delete %></button></td>
-
+      <% end %>
       </tr>
     <% end %>
 
