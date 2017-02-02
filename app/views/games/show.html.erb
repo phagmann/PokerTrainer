@@ -431,7 +431,7 @@ if (current === 11){
           if(claim == false ){
 
             winnings(gameID,data.player_id, 1.0 / set.length) //make sure pot divided if ties (1/ num of winners)
-            claim = true
+            claim = true // fix so all in "set" get even winnings
           }
           else {
             winnings(gameID,data.player_id, 0)
