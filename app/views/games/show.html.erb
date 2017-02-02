@@ -181,7 +181,6 @@ $("#bet_amount").keypress( function(event) {
 function raise(current, score, gameID, current_playerID){
 
        $.get( '/game1s/' + gameID.toString()).success (function(matchAmount)  { 
-          console.log()
           if (parseInt($("#slider_amount").val()) < matchAmount.current_high_bet){
             return
           }
@@ -206,7 +205,6 @@ function raise(current, score, gameID, current_playerID){
       var div = document.getElementById("b");   
       div.innerHTML = pot.total_chips; 
       var revisit = false;
-      console.log(players);
       for (var i = 0;i < players.length; i++){
 
          var player = players[i];
@@ -226,7 +224,6 @@ function raise(current, score, gameID, current_playerID){
 
 }
 
-  console.log(revisit)
   if (revisit == true){
     trackerIndex -= 1;
     current = 0;
@@ -285,7 +282,6 @@ function winnings(gameID,playerID, scaler){
   
 $.get( '/users/' + playerID.toString()).success (function(userDataq)  {
 $.get('/pots/' + gameID.toString()).success (function(dataq) { 
-console.log("winnings", scaler)
 $.post('/users/' + playerID.toString(), {
 
         _method: "PUT",
@@ -301,7 +297,6 @@ $.post('/pots/' + gameID.toString(), {
           total_chips: 0
         }
       }).success (function(data) {
-          console.log(data)
           var div = document.getElementById("b");
           var civ = document.getElementById("c" + userData.id.toString());
           div.innerHTML = data.total_chips;
@@ -348,7 +343,6 @@ $.post('/pots/' + gameID.toString(), {
       var div = document.getElementById("b");   
       div.innerHTML = pot.total_chips; 
       var revisit = false;
-      console.log(players);
       for (var i = 0;i < players.length; i++){
 
          var player = players[i];
@@ -368,7 +362,7 @@ $.post('/pots/' + gameID.toString(), {
 
 }
 
-  console.log(revisit)
+  
   if (revisit == true){
     trackerIndex -= 1;
     current = 0;
@@ -424,7 +418,6 @@ if (current === 11){
   var n = ""
   var trackCount = 0
   // go to games controller and figure this out with winnings!
-  sleep(200)
   $.get('/games/' + gameID.toString() + ".json").success (function(hands) {
   var claim = false
   for(var i = 0; i < score.length; i++){

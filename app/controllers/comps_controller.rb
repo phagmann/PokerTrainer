@@ -57,7 +57,6 @@ class CompsController < ApplicationController
         pot = Pot.find_by(game_id: params[:id])
         ai_player_list << Player.find(g.player3_id) if g.player3_id != nil
         ai_player_list << Player.find(g.player4_id) if g.player4_id != nil
-        p "*********",ai_player_list, match?(ai_player_list, g.current_high_bet)
         if match?(ai_player_list, g.current_high_bet) == true
             ai_player_list.each do |player|
                 pot.total_chips += player.betting

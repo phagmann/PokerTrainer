@@ -315,8 +315,6 @@ $.get('/hand2s/' + gameID.toString()).success (function(hands) {
         }
       }
       
-      console.log("money")
-      console.log(players);
       var div = document.getElementById("c" + player.id.toString());
       div.innerHTML = player.email + ": " + player.chips_bank.toString(); 
       var civ = document.getElementById("ac" + player.id.toString());
