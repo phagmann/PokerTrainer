@@ -42,7 +42,7 @@ $("#bet_amount").keypress( function(event) {
 
 </script>
 
-<%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px" %>
+<%= button_to "New Round", game_path(@game), method: :put, style: "position:relative; left:410px;top:100px", disabled: true, id: "round" %>
 
 <!-- call and flip being done at same time is probally causing issues -->
 <button id="flip" onclick="call(tracker[trackerIndex], <%= @score %>, <%= @game.id %>, <%= current_player.id %> );trackerIndex++;" style = "position:relative; left:410px;top:100px; margin:0;" > Check / Call</button>
@@ -254,10 +254,19 @@ if(playerID == hand.player_id && hand.fold == false){
             fold: bool
           }
         }).success (function(data) {
-    div = document.getElementById(data.positions_id)
+    var div = document.getElementById(data.positions_id)
     div.className = "card back"
     div.style= "background:black;top:" + div.style.top.toString() + ";left:" + div.style.left.toString()
     div.innerHTML = "*"
+    if(hand.player_id > 2){
+
+      var biv = document.getElementById("raise")
+      biv.disabled = true
+      var liv = document.getElementById("fold")
+      liv.disabled = true
+      var siv = document.getElementById("flip")
+      siv.innerHTML = "Just Keep Pressing, Just Keep Pressing"
+    }
 }
 
   )
@@ -266,11 +275,13 @@ if(playerID == hand.player_id && hand.fold == false){
 
 
 })
+
+  foldCheck(gameID);
     }
 
  )
 // maybe quick pause?
-foldCheck(gameID);
+
 
 }
 
@@ -417,6 +428,16 @@ if (current === 11){
   var set = []
   var n = ""
   var trackCount = 0
+  var biv = document.getElementById("round")
+  biv.disabled = false
+
+  var biv = document.getElementById("raise")
+  biv.disabled = true
+  var liv = document.getElementById("fold")
+  liv.disabled = true
+  var siv = document.getElementById("flip")
+  siv.disabled = true
+
   // go to games controller and figure this out with winnings!
   $.get('/games/' + gameID.toString() + ".json").success (function(hands) {
   var claim = false;
